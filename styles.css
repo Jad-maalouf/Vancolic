@@ -43,7 +43,7 @@
         width: auto;
         height: auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-        opacity: 0.4;
+        
 }
        
         
@@ -52,30 +52,36 @@
         opacity: 1; /* Reduce opacity when button is clicked */
         box-shadow: none; /* Remove box shadow when button is clicked */
         font-size: 1em;
-        color: white;
+        color: 003366;
     }
     
 #spi{
     background-image: url('images/spirits.avif');
+    opacity: 0.4;
    }
 
 #wine{
     background-image: url('images/wine-bubbles.png');
+    opacity: 0.4;
    
 }
 #cocktail{
 background-image: url('images/cocktails.jpg');
+opacity: 0.4;
    
 }
 #shot{
     background-image: url('images/shots.webp');
+    opacity: 0.4;
     
    }
 #beera{
     background-image: url('images/beer.jpg');
+    opacity: 0.4;
    }
 #nonalcoholic{
 background-image: url('images/non-alcoholic.avif');
+opacity: 0.4;
   
 }
     
