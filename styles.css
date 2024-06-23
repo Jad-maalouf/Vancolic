@@ -1,15 +1,15 @@
 @media only screen and (max-width: 1600px) {
     body {
         font-family: Arial, sans-serif;
-        background-color: #e6f0ff;
+        background-color: #d1d5d4;
         margin: 0;
         padding: 0;
-        color: #003366;
+        color: #013eb0;
     }
 
     #bar-name{
         text-align: center;
-        color:blue;
+        color:#013eb0;
     }
  
     .menu {
