@@ -39,11 +39,11 @@
         background-size: cover;
         background-position: right;
         font-size: 0.9em;
-        font-weight: bolder;
+        
         width: auto;
         height: auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-        opacity: 0.4;
+        opacity: 0.7;
         text-align: left;
         
 }
@@ -54,14 +54,14 @@
         opacity: 1; /* Reduce opacity when button is clicked */
         box-shadow: none; /* Remove box shadow when button is clicked */
         font-size: 1em;
+        font-weight: bolder;
         color: #013eb0;
     }
 
 #spi{
     background-image: url('images/alcohol.png');
     background-size: contain;
-    background-repeat: no-repeat;
-    
+    background-repeat: no-repeat;  
    }
 
 #wine{
@@ -93,9 +93,7 @@
 #nonalcoholic{
     background-image: url('images/non-alcoholic.png');
     background-size: contain;
-    background-repeat: no-repeat;
-
-  
+    background-repeat: no-repeat;  
 }
     
     
