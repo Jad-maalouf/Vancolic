@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar Menu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h1 id="bar-name">Joe’s Bar</h1>
+<div class="menu">
+    <div class="buttons">
+        <button id="spi" onclick="toggleCategory('spirits')" >Spirits </button>
+        <button id="wine" onclick="toggleCategory('wine-bubbles')" >Wine & Bubbles</button>
+        <button id="cocktail" onclick="toggleCategory('cocktails')">Cocktails</button>
+        <button id="shot" onclick="toggleCategory('shots')">Shots</button>
+        <button id="beera" onclick="toggleCategory('beer')">Beer</button>
+        <button id="nonalcoholic" onclick="toggleCategory('non-alcoholic')">Non-Alcoholic Beverages</button>
+    </div>
+
+    <div id="spirits" class="category">
+        <h2>Vodka</h2>
+        <table>
+            <tr><th class="item">Item</th><th class="price">Bottle ($)</th><th class="price">Glass ($)</th></tr>
+            <tr><td class="item">Stolichnaya</td><td class="price">20</td><td class="price">3</td></tr>
+            <tr><td class="item">Stolichnaya Gold</td><td class="price">30</td><td class="price">6</td></tr>
+            <tr><td class="item">Russian Standard</td><td class="price">20</td><td class="price">3</td></tr>
+            <tr><td class="item">Russian Standard Gold</td><td class="price">30</td><td class="price">6</td></tr>
+            <tr><td class="item">Absolut</td><td class="price">20</td><td class="price">3</td></tr>
+            <tr><td class="item">Grey Goose</td><td class="price">50</td><td class="price">8</td></tr>
+            <tr><td class="item">Ketel One</td><td class="price">50</td><td class="price">8</td></tr>
+            <tr><td class="item">Belvedere</td><td class="price">50</td><td class="price">8</td></tr>
+        </table>
+        <h2>Gin</h2>
+        <table>
+            <tr><th class="item">Item</th><th class="price">Bottle ($)</th><th class="price">Glass ($)</th></tr>
+            <tr><td class="item">Gin Gordon's</td><td class="price">20</td><td class="price">3</td></tr>
+            <tr><td class="item">Tanqueray</td><td class="price">40</td><td class="price">6</td></tr>
+            <tr><td class="item">Bombay</td><td class="price">40</td><td class="price">6</td></tr>
+            <tr><td class="item">Hendrick’s</td><td class="price">50</td><td class="price">8</td></tr>
+        </table>
+        <h2>Tequila</h2>
+        <table>
+            <tr><th class="item">Item</th><th class="price">Bottle ($)</th><th class="price">Glass ($)</th></tr>
+            <tr><td class="item">Jose Cuervo Silver</td><td class="price">20</td><td class="price">3</td></tr>
+            <tr><td class="item">Jose Cuervo Gold</td><td class="price">20</td><td class="price">3</td></tr>
+        </table>
+        <h2>Whisky</h2>
+        <table>
+            <tr><th class="item">Item</th><th class="price">Bottle ($)</th><th class="price">Glass ($)</th></tr>
+            <tr><td class="item">Jameson</td><td class="price">30</td><td class="price">5</td></tr>
+            <tr><td class="item">J&B</td><td class="price">25</td><td class="price">5</td></tr>
+            <tr><td class="item">Red Label</td><td class="price">40</td><td class="price">5</td></tr>
+            <tr><td class="item">Black Label</td><td class="price">50</td><td class="price">6</td></tr>
+            <tr><td class="item">Double Black</td><td class="price">60</td><td class="price">8</td></tr>
+            <tr><td class="item">Gold Label</td><td class="price">120</td><td class="price">12</td></tr>
+            <tr><td class="item">Chivas 12</td><td class="price">45</td><td class="price">6</td></tr>
+            <tr><td class="item">Chivas 18</td><td class="price">120</td><td class="price">12</td></tr>
+            <tr><td class="item">Jack Daniel’s</td><td class="price">35</td><td class="price">5</td></tr>
+            <tr><td class="item">Jack Fire</td><td class="price">35</td><td class="price">5</td></tr>
+            <tr><td class="item">Jim Beam</td><td class="price">20</td><td class="price">3</td></tr>
+            <tr><td class="item">Glenfiddich 12</td><td class="price">60</td><td class="price">8</td></tr>
+            <tr><td class="item">Dimple 12</td><td class="price">60</td><td class="price">8</td></tr>
+            <tr><td class="item">Old Parr</td><td class="price">60</td><td class="price">8</td></tr>
+            <tr><td class="item">Monkey Shoulder</td><td class="price">40</td><td class="price">6</td></tr>
+            <tr><td class="item">Fireball</td><td class="price">40</td><td class="price">6</td></tr>
+        </table>
+    </div>
+
+    <div id="wine-bubbles" class="category">
+        <h2>Wine</h2>
+        <table>
+            <tr><th class="item">Item</th><th class="price">Bottle ($)</th><th class="price">Glass ($)</th></tr>
+            <tr><td class="item">Ksara Reserve du Couvent</td><td class="price">30</td><td class="price">4</td></tr>
+            <tr><td class="item">Ksara Sunset</td><td class="price">30</td><td class="price">4</td></tr>
+            <tr><td class="item">Ksara Blanc de Blanc</td><td class="price">30</td><td class="price">4</td></tr>
+            <tr><td class="item">Karam Maison</td><td class="price">30</td><td class="price">4</td></tr>
+            <tr><td class="item">Karam Thouraya</td><td class="price">30</td><td class="price">4</td></tr>
+            <tr><td class="item">Karam Arc en Ciel</td><td class="price">30</td><td class="price">4</td></tr>
+            <tr><td class="item">Karam Cloud Nine</td><td class="price">30</td><td class="price">4</td></tr>
+            <tr><td class="item">Ixsir Red</td><td class="price">40</td><td class="price">5</td></tr>
+            <tr><td class="item">Ixsir Rose</td><td class="price">40</td><td class="price">5</td></tr>
+            <tr><td class="item">Ixsir White</td><td class="price">40</td><td class="price">5</td></tr>
+        </table>
+        <h2>Prosecco</h2>
+        <table>
+            <tr><th class="item">Item</th><th class="price">Bottle ($)</th><th class="price">Glass ($)</th></tr>
+            <tr><td class="item">Martini</td><td class="price">20</td><td class="price">3</td></tr>
+            <tr><td class="item">Cinzano</td><td class="price">20</td><td class="price">3</td></tr>
+            <tr><td class="item">Ponte Villoni</td><td class="price">20</td><td class="price">3</td></tr>
+        </table>
+        <h2>Sparkling Wine</h2>
+        <table>
+            <tr><th class="item">Item</th><th class="price">Bottle ($)</th><th class="price">Glass ($)</th></tr>
+            <tr><td class="item">Martini Rose</td><td class="price">20</td><td class="price">3</td></tr>
+            <tr><td class="item">Martini Brut</td><td class="price">20</td><td class="price">3</td></tr>
+        </table>
+    </div>
+
+    <div id="cocktails" class="category">
+        <h2>International Cocktails</h2>
+        <table>
+            <tr><th class="item">Item</th><th class="price">Price ($)</th></tr>
+            <tr><td class="item">Gin Basil Smash</td><td class="price">5</td></tr>
+            <tr><td class="item">Negroni</td><td class="price">5</td></tr>
+            <tr><td class="item">Mojito</td><td class="price">5</td></tr>
+            <tr><td class="item">Pina Colada</td><td class="price">5</td></tr>
+            <tr><td class="item">Cuba Libre</td><td class="price">5</td></tr>
+            <tr><td class="item">Sex on the Beach</td><td class="price">5</td></tr>
+            <tr><td class="item">Long Island Iced Tea</td><td class="price">5</td></tr>
+            <tr><td class="item">Tequila Sunrise</td><td class="price">5</td></tr>
+            <tr><td class="item">Blue Hawaii</td><td class="price">5</td></tr>
+            <tr><td class="item">Old Fashioned</td><td class="price">5</td></tr>
+            <tr><td class="item">Whisky Sour</td><td class="price">5</td></tr>
+            <tr><td class="item">Godfather</td><td class="price">5</td></tr>
+        </table>
+        <h2>Special Joe’s Bar Cocktails</h2>
+        <table>
+            <tr><th class="item">Item</th><th class="price">Price ($)</th></tr>
+            <tr><td class="item">Joe’s (Gin, Lime Juice, Sour Mix, 7up, Mint, Crushed Ice)</td><td class="price">5</td></tr>
+            <tr><td class="item">Joe’s (Vodka, Orange Liqueur, Lime Juice, Sugar)</td><td class="price">5</td></tr>
+            <tr><td class="item">Joe’s (Vodka, Rum, Passion Fruit, Lime Juice, Sugar)</td><td class="price">5</td></tr>
+            <tr><td class="item">Joe’s (Gin, Tequila, Apple, Lime Juice, Sugar)</td><td class="price">5</td></tr>
+            <tr><td class="item">Joe’s (Rum, Tequila, Blue Curacao, Soda)</td><td class="price">5</td></tr>
+            <tr><td class="item">Joe’s (Rum, Coconut Syrup, Blue Curacao, Pineapple Juice, 7up)</td><td class="price">5</td></tr>
+            <tr><td class="item">Joe’s/Lost (Vodka, Blue Curacao, Strawberry, Lime, Sugar)</td><td class="price">5</td></tr>
+            <tr><td class="item">Joe’s/Special Sangria (Rose Wine, Fresh Fruits, Soda Water)</td><td class="price">5</td></tr>
+            <tr><td class="item">Joe’s (Whisky, Coffee Liqueur, Irish Cream)</td><td class="price">5</td></tr>
+            <tr><td class="item">Joe’s (Vodka, Amaretto, Pineapple Juice, Grenadine, Cherry)</td><td class="price">5</td></tr>
+        </table>
+    </div>
+
+    <div id="shots" class="category">
+        <h2>Shots</h2>
+        <table>
+            <tr><th class="item">Item</th><th class="price">Price ($)</th></tr>
+            <tr><td class="item">Brain Damage</td><td class="price">3</td></tr>
+            <tr><td class="item">B52</td><td class="price">3</td></tr>
+            <tr><td class="item">B55</td><td class="price">3</td></tr>
+            <tr><td class="item">Drunk Melon</td><td class="price">3</td></tr>
+            <tr><td class="item">Tequila</td><td class="price">3</td></tr>
+            <tr><td class="item">Jagermeister</td><td class="price">3</td></tr>
+        </table>
+        <h2>Special Joe’s Bar Shots</h2>
+        <table>
+            <tr><th class="item">Item</th><th class="price">Price ($)</th></tr>
+            <tr><td class="item">Pink Sky</td><td class="price">4</td></tr>
+            <tr><td class="item">Peach Party</td><td class="price">4</td></tr>
+            <tr><td class="item">Grenadine Light</td><td class="price">4</td></tr>
+            <tr><td class="item">Blue Night</td><td class="price">4</td></tr>
+        </table>
+    </div>
+
+    <div id="beer" class="category">
+        <h2>Beer</h2>
+        <table>
+            <tr><th class="item">Item</th><th class="price">Price ($)</th></tr>
+            <tr><td class="item">Almaza</td><td class="price">3</td></tr>
+            <tr><td class="item">Almaza Light</td><td class="price">3</td></tr>
+            <tr><td class="item">Almaza Dark</td><td class="price">3</td></tr>
+            <tr><td class="item">Corona</td><td class="price">3</td></tr>
+            <tr><td class="item">Heineken</td><td class="price">3</td></tr>
+            <tr><td class="item">Add Mexican</td><td class="price">1</td></tr>
+        </table>
+    </div>
+
+    <div id="non-alcoholic" class="category">
+        <h2>Non-Alcoholic Cocktails</h2>
+        <table>
+            <tr><th class="item">Item</th><th class="price">Price ($)</th></tr>
+            <tr><td class="item">Virgin Jamaica</td><td class="price">4</td></tr>
+            <tr><td class="item">Minted Lemonade</td><td class="price">4</td></tr>
+        </table>
+        <h2>Soft Drinks and Water</h2>
+        <table>
+            <tr><th class="item">Item</th><th class="price">Price ($)</th></tr>
+            <tr><td class="item">Soft Drink</td><td class="price">2</td></tr>
+            <tr><td class="item">Sparkling Water</td><td class="price">2</td></tr>
+            <tr><td class="item">Energy Drink</td><td class="price">2</td></tr>
+            <tr><td class="item">Water</td><td class="price">2</td></tr>
+        </table>
+    </div>
+</div>
+
+<script src="scripts.js"></script>
+</body>
+</html>

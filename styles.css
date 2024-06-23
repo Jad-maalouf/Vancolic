@@ -1,0 +1,135 @@
+@media only screen and (max-width: 1600px) {
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #e6f0ff;
+        margin: 0;
+        padding: 0;
+        color: #003366;
+    }
+
+    #bar-name{
+        text-align: center;
+    }
+ 
+    .menu {
+        width: 90%;
+        margin: 0 auto;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+    
+    .buttons {
+        text-align: center;
+        margin-bottom: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr; 
+      
+    }
+
+    .buttons button {
+        background-color: #003366;
+        color: whitesmoke;
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        background-size: cover;
+        background-position: center;
+        font-size: 0.8em;
+        font-weight: bolder;
+        width: auto;
+        height: auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        opacity: 0.7;
+}
+       
+        
+    
+.buttons button:active, .buttons button:focus  {
+        opacity: 1; /* Reduce opacity when button is clicked */
+        box-shadow: none; /* Remove box shadow when button is clicked */
+        font-size: 1em;
+        color: white;
+    }
+    
+#spi{
+    background-image: url('images/spirits.avif');
+   }
+
+#wine{
+    background-image: url('images/wine-bubbles.png');
+   
+}
+#cocktail{
+background-image: url('images/cocktails.jpg');
+   
+}
+#shot{
+    background-image: url('images/shots.webp');
+    
+   }
+#beera{
+    background-image: url('images/beer.jpg');
+   }
+#nonalcoholic{
+background-image: url('images/non-alcoholic.avif');
+  
+}
+    
+    
+.category {
+    display: none;
+}
+#spirits{
+    display: block;
+}
+    
+.category h2 {
+        margin-top: 20px;
+        color: #003366;
+        text-align: center;
+        
+        
+}
+    
+    .category table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        
+    }
+    
+    .category th, .category td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ccc;
+    }
+    
+    .category th {
+        background-color: #cce0ff;
+    }
+    
+    .category td {
+        background-color: #f4f8ff;
+    }
+    th.item, td.item {
+        width: 60%;
+    }
+    th.price, td.price {
+        width: 20%;
+        
+    }
+    th.price, th.item{
+        height: 50px;
+       
+      
+    }
+}
+
+   
+    
+    
+    
