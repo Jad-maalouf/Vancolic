@@ -1,6 +1,6 @@
 @media only screen and (max-width: 1600px) {
     body {
-        font-family: Arial, sans-serif;
+        font-family:'Times New Roman', Times, serif;
         background-color: #e6f0ff;
         margin: 0;
         padding: 0;
@@ -29,20 +29,22 @@
     }
 
     .buttons button {
-        background-color: #003366;
-        color: whitesmoke;
+        background-color: #c6cbc7;
+        color: #013eb0;
         padding: 10px 20px;
         margin: 5px;
         border: none;
         cursor: pointer;
         border-radius: 5px;
         background-size: cover;
-        background-position: center;
-        font-size: 0.8em;
+        background-position: right;
+        font-size: 0.9em;
         font-weight: bolder;
         width: auto;
         height: auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        opacity: 0.4;
+        text-align: left;
         
 }
        
@@ -52,36 +54,47 @@
         opacity: 1; /* Reduce opacity when button is clicked */
         box-shadow: none; /* Remove box shadow when button is clicked */
         font-size: 1em;
-        color: 003366;
+        color: #013eb0;
     }
-    
+
 #spi{
-    background-image: url('images/spirits.avif');
-    opacity: 0.4;
+    background-image: url('images/alcohol.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    
    }
 
 #wine{
-    background-image: url('images/wine-bubbles.png');
-    opacity: 0.4;
+    background-image: url('images/wine.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    
    
 }
 #cocktail{
-background-image: url('images/cocktails.jpg');
-opacity: 0.4;
+    background-image: url('images/cocktails.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+
    
 }
 #shot{
-    background-image: url('images/shots.webp');
-    opacity: 0.4;
+    background-image: url('images/shot.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    
     
    }
 #beera{
-    background-image: url('images/beer.jpg');
-    opacity: 0.4;
+    background-image: url('images/beer.png');
+    background-size: contain;
+    background-repeat: no-repeat;
    }
 #nonalcoholic{
-background-image: url('images/non-alcoholic.avif');
-opacity: 0.4;
+    background-image: url('images/non-alcoholic.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+
   
 }
     

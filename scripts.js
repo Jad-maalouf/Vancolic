@@ -9,6 +9,7 @@ function toggleCategory(categoryId) {
     });
 }
 
+
 // Initialize: Hide all categories on page load
 document.addEventListener('DOMContentLoaded', () => {
     const categories = document.querySelectorAll('.category');
