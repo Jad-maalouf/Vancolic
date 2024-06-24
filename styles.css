@@ -1,22 +1,30 @@
-@media only screen and (max-width: 1600px) {
+@media only screen and (max-width: 2500px) {
     body {
         font-family:'Times New Roman', Times, serif;
-        background-color: #e6f0ff;
+        background-color: #072d3a;
         margin: 0;
         padding: 0;
-        color: #003366;
+        color: #072d3a;
     }
-
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
     #bar-name{
         text-align: center;
+        color: #dea285;
+        text-shadow:#072d3a;
+        padding-bottom: 15px;
     }
  
     .menu {
         width: 90%;
         margin: 0 auto;
-        background-color: #fff;
+        background-color: #072d3a;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 10px;
+
     }
     
     .buttons {
@@ -29,8 +37,8 @@
     }
 
     .buttons button {
-        background-color: #c6cbc7;
-        color: #013eb0;
+        background-color: #e2e3d1;
+        color: #072d3a;
         padding: 10px 20px;
         margin: 5px;
         border: none;
@@ -38,7 +46,7 @@
         border-radius: 5px;
         background-size: cover;
         background-position: right;
-        font-size: 0.9em;
+        font-size: 0.9rem;
         
         width: auto;
         height: auto;
@@ -53,9 +61,9 @@
 .buttons button:active, .buttons button:focus  {
         opacity: 1; /* Reduce opacity when button is clicked */
         box-shadow: none; /* Remove box shadow when button is clicked */
-        font-size: 1em;
+        font-size: 1rem;
         font-weight: bolder;
-        color: #013eb0;
+        color: #072d3a;
     }
 
 #spi{
@@ -104,18 +112,20 @@
     display: block;
 }
     
-.category h2 {
-        margin-top: 20px;
-        color: #003366;
-        text-align: center;
-        
-        
+.sub_menu{
+        color: #072d3a;
+        background-color: #e2e3d1;
+        opacity: 0.8;
+        text-align: center;        
+}
+table{
+    border-radius: 10px;
 }
     
     .category table {
         width: 100%;
         border-collapse: collapse;
-        margin-bottom: 20px;
+        margin-bottom: 5px;
         
     }
     
@@ -125,25 +135,28 @@
         border-bottom: 1px solid #ccc;
     }
     
-    .category th {
-        background-color: #cce0ff;
-    }
-    
+  
     .category td {
-        background-color: #f4f8ff;
+        background-color: #e3e4cf;
+    }
+    tr{
+        width: 100%;
     }
     th.item, td.item {
-        width: 60%;
+        width: 50%;
     }
     th.price, td.price {
-        width: 20%;
+        width: 25%;
+        text-align: center;
         
     }
     th.price, th.item{
         height: 50px;
+        background-color: #0293bf;
        
       
     }
+
 }
 
    
