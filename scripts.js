@@ -1,24 +1,34 @@
-function toggleCategory(categoryId) {
+function toggleCategory(categoryId, buttonId) {
     const categories = document.querySelectorAll('.category');
+    const buttons = document.querySelectorAll('.the_buttons');
+
+    // Toggle category display
     categories.forEach(category => {
-        if (category.id === categoryId) {
-            category.style.display = category.style.display === 'none' ? 'block' : 'block';
+        category.style.display = category.id === categoryId ? 'block' : 'none';
+    });
+
+    // Update button styles
+    buttons.forEach(button => {
+        if (button.id === buttonId) {
+            button.classList.add('selected');
         } else {
-            category.style.display = 'none';
+            button.classList.remove('selected');
         }
     });
 }
 
-
-// Initialize: Hide all categories on page load
+// Initialize: Hide all categories on page load and set default button
 document.addEventListener('DOMContentLoaded', () => {
     const categories = document.querySelectorAll('.category');
+    const defaultCategoryId = 'spirits';
+    const defaultButtonId = 'spi';
+
     categories.forEach(category => {
-        if(category.id === "spirits"){
-            category.style.display = 'block';
-        }
-        else {
-            category.style.display = 'none';
-        }
+        category.style.display = category.id === defaultCategoryId ? 'block' : 'none';
     });
+
+    const defaultButton = document.querySelector(`#${defaultButtonId}`);
+    if (defaultButton) {
+        defaultButton.classList.add('selected');
+    }
 });

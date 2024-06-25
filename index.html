@@ -8,16 +8,18 @@
 </head>
 <body>
 
-<h1 id="bar-name">VANCOLIC</h1>
+<!-- <h1 id="bar-name">VANCOLIC</h1> -->
+<img src="images/logo.jpg" alt="logo" id="logo">
 <div class="menu">
     <div class="buttons">
-        <button class='the_buttons'id="spi" onclick="toggleCategory('spirits')" ><span>Spirits</span> </button>
-        <button class='the_buttons'id="wine" onclick="toggleCategory('wine-bubbles')" >Wine & Bubbles</button>
-        <button class='the_buttons'id="cocktail" onclick="toggleCategory('cocktails')">Cocktails</button>
-        <button class='the_buttons'id="shot" onclick="toggleCategory('shots')">Shots</button>
-        <button class='the_buttons'id="beera" onclick="toggleCategory('beer')">Beer</button>
-        <button class='the_buttons'id="nonalcoholic" onclick="toggleCategory('non-alcoholic')">Non-Alcoholic</button>
+        <button class='the_buttons' id="spi" onclick="toggleCategory('spirits', 'spi')"><span>Spirits</span></button>
+        <button class='the_buttons' id="wine" onclick="toggleCategory('wine-bubbles', 'wine')">Wine & Bubbles</button>
+        <button class='the_buttons' id="cocktail" onclick="toggleCategory('cocktails', 'cocktail')">Cocktails</button>
+        <button class='the_buttons' id="shot" onclick="toggleCategory('shots', 'shot')">Shots</button>
+        <button class='the_buttons' id="beera" onclick="toggleCategory('beer', 'beera')">Beer</button>
+        <button class='the_buttons' id="nonalcoholic" onclick="toggleCategory('non-alcoholic', 'nonalcoholic')">Non-Alcoholic</button>
     </div>
+    
 
     <div id="spirits" class="category">
         <h2 class="sub_menu">Vodka</h2>
