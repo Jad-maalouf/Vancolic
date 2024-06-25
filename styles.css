@@ -58,7 +58,7 @@
        
         
     
-.buttons button:active, .buttons button:focus  {
+ .buttons button:focus  {
         opacity: 1; /* Reduce opacity when button is clicked */
         box-shadow: none; /* Remove box shadow when button is clicked */
         font-size: 1rem;
