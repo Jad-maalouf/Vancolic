@@ -153,10 +153,10 @@ table{
         width: 100%;
     }
     th.item, td.item {
-        width: 50%;
+        width: 40%;
     }
     th.price, td.price {
-        width: 25%;
+        width: 30%;
         text-align: center;
         
     }
