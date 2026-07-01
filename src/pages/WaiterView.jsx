@@ -5,7 +5,7 @@ import { OrderItemRow } from '../components/OrderItemRow.jsx';
 import { MenuBrowser } from '../components/MenuBrowser.jsx';
 import { TableScroll } from '../components/TableScroll.jsx';
 import { IconButton } from '../components/IconButton.jsx';
-import { CheckIcon, CloseIcon, BackIcon, PlusIcon } from '../components/icons.jsx';
+import { CheckIcon, CloseIcon, BackIcon, PlusIcon, BottleIcon, GlassIcon } from '../components/icons.jsx';
 import { useTables } from '../hooks/useTables.js';
 import { useMenuItems } from '../hooks/useMenuItems.js';
 import { useOrderItems } from '../hooks/useOrderItems.js';
@@ -125,7 +125,7 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
               <div className="add-actions">
                 {item.bottle_price != null ? (
                   <IconButton
-                    icon={PlusIcon}
+                    icon={BottleIcon}
                     label="Add bottle"
                     className="icon-button-neutral icon-button-sm"
                     disabled={addingId === `${item.id}-bottle`}
@@ -134,7 +134,7 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
                 ) : null}
                 {item.glass_price != null ? (
                   <IconButton
-                    icon={PlusIcon}
+                    icon={item.bottle_price != null ? GlassIcon : PlusIcon}
                     label={item.bottle_price != null ? 'Add glass' : 'Add'}
                     className="icon-button-neutral icon-button-sm"
                     disabled={addingId === `${item.id}-glass`}

@@ -147,6 +147,16 @@ th.item {
   width: 100%;
   box-sizing: border-box;
 }
+/* Hide native number-input spinner arrows: at 80px wide they overlap the
+   value and look detached from the rest of the row, especially on mobile. */
+.menu-edit-table .menu-edit-price input::-webkit-outer-spin-button,
+.menu-edit-table .menu-edit-price input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.menu-edit-table .menu-edit-price input[type='number'] {
+  -moz-appearance: textfield;
+}
 
 .staff-login-link {
   display: block;

@@ -97,3 +97,22 @@ export function CashIcon(props) {
     </svg>
   );
 }
+
+export function BottleIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M9 2h6" />
+      <path d="M10 2v4.5L8 9v10.5A2.5 2.5 0 0 0 10.5 22h3a2.5 2.5 0 0 0 2.5-2.5V9l-2-2.5V2" />
+      <path d="M8 13h8" />
+    </svg>
+  );
+}
+
+export function GlassIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M6 3h12l-1.6 16a2 2 0 0 1-2 1.8h-4.8a2 2 0 0 1-2-1.8L6 3z" />
+      <path d="M7.2 9h9.6" />
+    </svg>
+  );
+}
