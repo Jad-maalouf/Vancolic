@@ -71,7 +71,7 @@ function MenuItemEditRow({ item, onSaved }) {
           />
         ) : null}
       </td>
-      <td>
+      <td className="menu-edit-price">
         <input
           type="number"
           value={draft.bottlePrice}
@@ -79,7 +79,7 @@ function MenuItemEditRow({ item, onSaved }) {
           placeholder="-"
         />
       </td>
-      <td>
+      <td className="menu-edit-price">
         <input
           type="number"
           value={draft.glassPrice}
@@ -223,8 +223,8 @@ export function MenuTab() {
                   <tbody>
                     <tr>
                       <th>Name / description</th>
-                      <th>Bottle</th>
-                      <th>Glass / price</th>
+                      <th className="menu-edit-price">Bottle</th>
+                      <th className="menu-edit-price">Glass / price</th>
                       <th>Active</th>
                       <th></th>
                     </tr>

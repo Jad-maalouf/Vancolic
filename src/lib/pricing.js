@@ -13,6 +13,14 @@ export function formatPrice(value) {
   return Number.isInteger(n) ? `$${n}` : `$${n.toFixed(2)}`;
 }
 
+// Same formatting as formatPrice but without the "$" — for menu tables where
+// the column header (e.g. "Bottle ($)") already carries the currency symbol.
+export function formatPriceValue(value) {
+  if (value == null) return '-';
+  const n = Number(value);
+  return Number.isInteger(n) ? `${n}` : n.toFixed(2);
+}
+
 // Groups a flat list of menu items (already sorted by category, subcategory,
 // sort_order from the backend) into CATEGORIES order -> subcategory -> items.
 export function groupMenuItems(items) {

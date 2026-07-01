@@ -1,7 +1,7 @@
 const express = require('express');
 const { authenticate, requireRole } = require('../middleware/auth.js');
 const { asyncHandler } = require('../lib/asyncHandler.js');
-const { findOrderById, listOpenOrders, closeOrder } = require('../db/queries/orders.js');
+const { findOrderById, listOpenOrders, closeOrder, listClosedOrders } = require('../db/queries/orders.js');
 const { listItemsForOrder, addOrderItem } = require('../db/queries/orderItems.js');
 const { findMenuItemById } = require('../db/queries/menuItems.js');
 
@@ -10,6 +10,13 @@ const router = express.Router();
 // Full floor visibility: any authenticated staff can see all open orders.
 router.get('/', authenticate, asyncHandler(async (req, res) => {
   const orders = await listOpenOrders();
+  return res.json({ orders });
+}));
+
+// Manager reporting: closed (paid/cancelled) tabs, optionally filtered by closed_at date range.
+router.get('/closed', authenticate, requireRole('manager'), asyncHandler(async (req, res) => {
+  const { startDate, endDate } = req.query;
+  const orders = await listClosedOrders({ startDate, endDate });
   return res.json({ orders });
 }));
 

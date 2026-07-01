@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { TopNav } from '../components/TopNav.jsx';
 import { TablesTab } from './manager/TablesTab.jsx';
+import { CompletedOrdersTab } from './manager/CompletedOrdersTab.jsx';
 import { MenuTab } from './manager/MenuTab.jsx';
 import { StaffTab } from './manager/StaffTab.jsx';
 
 const TABS = [
   { id: 'tables', label: 'Tables', component: TablesTab },
+  { id: 'completed', label: 'Completed', component: CompletedOrdersTab },
   { id: 'menu', label: 'Menu', component: MenuTab },
   { id: 'staff', label: 'Staff', component: StaffTab },
 ];

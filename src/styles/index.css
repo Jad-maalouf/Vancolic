@@ -140,6 +140,13 @@ th.item {
 .staff-tab .manager-table {
   min-width: 640px;
 }
+.menu-edit-table .menu-edit-price {
+  width: 80px;
+}
+.menu-edit-table .menu-edit-price input {
+  width: 100%;
+  box-sizing: border-box;
+}
 
 .staff-login-link {
   display: block;
@@ -300,6 +307,9 @@ button {
 }
 .order-builder section {
   margin-bottom: 24px;
+}
+.completed-order-row {
+  cursor: pointer;
 }
 .add-actions {
   display: flex;

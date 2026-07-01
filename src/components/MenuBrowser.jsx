@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { CategoryTabs } from './CategoryTabs.jsx';
 import { TableScroll } from './TableScroll.jsx';
-import { formatPrice, groupMenuItems } from '../lib/pricing.js';
+import { formatPriceValue, groupMenuItems } from '../lib/pricing.js';
 
 // Shared by the public menu (read-only) and the waiter's order builder
 // (renderActions adds "add to order" controls per row).
@@ -51,11 +51,11 @@ export function MenuBrowser({ items, renderActions, defaultCategoryId }) {
                         </td>
                         {hasBottle ? (
                           <>
-                            <td className="price">{formatPrice(item.bottle_price)}</td>
-                            <td className="price">{formatPrice(item.glass_price)}</td>
+                            <td className="price">{formatPriceValue(item.bottle_price)}</td>
+                            <td className="price">{formatPriceValue(item.glass_price)}</td>
                           </>
                         ) : (
-                          <td className="price">{formatPrice(item.glass_price)}</td>
+                          <td className="price">{formatPriceValue(item.glass_price)}</td>
                         )}
                         {renderActions ? <td className="price">{renderActions(item)}</td> : null}
                       </tr>

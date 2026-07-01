@@ -36,4 +36,19 @@ async function closeOrder(id, { closedBy, status }) {
   return rows[0] || null;
 }
 
-module.exports = { openOrder, findOrderById, listOpenOrders, closeOrder };
+async function listClosedOrders({ startDate, endDate } = {}) {
+  const { rows } = await query(
+    `select o.*, rt.label as table_label, ot.total
+     from orders o
+     join restaurant_tables rt on rt.id = o.table_id
+     left join order_totals ot on ot.order_id = o.id
+     where o.status in ('paid', 'cancelled')
+       and ($1::date is null or o.closed_at >= $1::date)
+       and ($2::date is null or o.closed_at < $2::date + interval '1 day')
+     order by o.closed_at desc`,
+    [startDate ?? null, endDate ?? null]
+  );
+  return rows;
+}
+
+module.exports = { openOrder, findOrderById, listOpenOrders, closeOrder, listClosedOrders };
