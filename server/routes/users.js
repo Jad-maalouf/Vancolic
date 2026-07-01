@@ -1,8 +1,8 @@
-import express from 'express';
-import bcrypt from 'bcryptjs';
-import { authenticate, requireRole } from '../middleware/auth.js';
-import { asyncHandler } from '../lib/asyncHandler.js';
-import { listUsers, createUser, findUserRawById, updateUser } from '../db/queries/users.js';
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const { authenticate, requireRole } = require('../middleware/auth.js');
+const { asyncHandler } = require('../lib/asyncHandler.js');
+const { listUsers, createUser, findUserRawById, updateUser } = require('../db/queries/users.js');
 
 const router = express.Router();
 const ROLES = ['manager', 'bartender', 'waiter'];
@@ -48,4 +48,4 @@ router.patch('/:id', authenticate, requireRole('manager'), asyncHandler(async (r
   return res.json({ user });
 }));
 
-export default router;
+module.exports = router;

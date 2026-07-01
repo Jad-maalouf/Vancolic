@@ -1,9 +1,9 @@
-import express from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { authenticate } from '../middleware/auth.js';
-import { asyncHandler } from '../lib/asyncHandler.js';
-import { findUserByEmail, findUserById } from '../db/queries/users.js';
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { authenticate } = require('../middleware/auth.js');
+const { asyncHandler } = require('../lib/asyncHandler.js');
+const { findUserByEmail, findUserById } = require('../db/queries/users.js');
 
 const router = express.Router();
 const TOKEN_TTL = '12h';
@@ -44,4 +44,4 @@ router.get('/me', authenticate, asyncHandler(async (req, res) => {
   });
 }));
 
-export default router;
+module.exports = router;

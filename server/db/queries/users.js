@@ -1,11 +1,11 @@
-import { query } from '../../db.js';
+const { query } = require('../../db.js');
 
-export async function findUserByEmail(email) {
+async function findUserByEmail(email) {
   const { rows } = await query('select * from users where email = $1', [email]);
   return rows[0] || null;
 }
 
-export async function findUserById(id) {
+async function findUserById(id) {
   const { rows } = await query(
     'select id, full_name, email, role, active, created_at from users where id = $1',
     [id]
@@ -15,19 +15,19 @@ export async function findUserById(id) {
 
 // Includes password_hash — for internal use only (e.g. merging a partial
 // update onto the existing row). Never send this row directly to a client.
-export async function findUserRawById(id) {
+async function findUserRawById(id) {
   const { rows } = await query('select * from users where id = $1', [id]);
   return rows[0] || null;
 }
 
-export async function listUsers() {
+async function listUsers() {
   const { rows } = await query(
     'select id, full_name, email, role, active, created_at from users order by full_name'
   );
   return rows;
 }
 
-export async function createUser({ fullName, email, passwordHash, role }) {
+async function createUser({ fullName, email, passwordHash, role }) {
   const { rows } = await query(
     `insert into users (full_name, email, password_hash, role)
      values ($1, $2, $3, $4)
@@ -39,7 +39,7 @@ export async function createUser({ fullName, email, passwordHash, role }) {
 
 // Full-row update. Callers (route handlers) merge partial edits onto the
 // existing row first via findUserById, so omitted fields keep their value.
-export async function updateUser(id, { fullName, role, active, passwordHash }) {
+async function updateUser(id, { fullName, role, active, passwordHash }) {
   const { rows } = await query(
     `update users set
        full_name = $2,
@@ -52,3 +52,5 @@ export async function updateUser(id, { fullName, role, active, passwordHash }) {
   );
   return rows[0] || null;
 }
+
+module.exports = { findUserByEmail, findUserById, findUserRawById, listUsers, createUser, updateUser };

@@ -1,6 +1,4 @@
-import pg from 'pg';
-
-const { Pool } = pg;
+const { Pool } = require('pg');
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is not set. Copy .env.example to .env and fill it in.');
@@ -14,13 +12,15 @@ const isLocalHost = /(^|@)(localhost|127\.0\.0\.1)/.test(process.env.DATABASE_UR
 // separate process, so there's no benefit to a large pool, and a big pool
 // across many concurrent invocations can exhaust Supabase's connection limit.
 // Use Supabase's pooled ("Transaction" mode, port 6543) connection string here.
-export const pool = new Pool({
+const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   max: 2,
   idleTimeoutMillis: 30_000,
   ssl: isLocalHost ? false : { rejectUnauthorized: false },
 });
 
-export async function query(text, params) {
+async function query(text, params) {
   return pool.query(text, params);
 }
+
+module.exports = { pool, query };

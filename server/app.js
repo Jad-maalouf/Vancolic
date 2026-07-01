@@ -1,11 +1,11 @@
-import express from 'express';
-import cors from 'cors';
-import authRoutes from './routes/auth.js';
-import menuRoutes from './routes/menu.js';
-import tableRoutes from './routes/tables.js';
-import orderRoutes from './routes/orders.js';
-import orderItemRoutes from './routes/orderItems.js';
-import userRoutes from './routes/users.js';
+const express = require('express');
+const cors = require('cors');
+const authRoutes = require('./routes/auth.js');
+const menuRoutes = require('./routes/menu.js');
+const tableRoutes = require('./routes/tables.js');
+const orderRoutes = require('./routes/orders.js');
+const orderItemRoutes = require('./routes/orderItems.js');
+const userRoutes = require('./routes/users.js');
 
 // Confirmed via local testing: when netlify.toml redirects "/api/*" to this
 // function, both `netlify dev` and (per Netlify's docs) production keep the
@@ -14,7 +14,7 @@ import userRoutes from './routes/users.js';
 // mounted at both prefixes so this keeps working even if that ever changes.
 const API_PREFIXES = ['/api', '/.netlify/functions/api'];
 
-export const app = express();
+const app = express();
 app.use(cors());
 app.use(express.json());
 
@@ -35,3 +35,5 @@ app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ error: 'Internal server error' });
 });
+
+module.exports = { app };

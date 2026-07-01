@@ -1,10 +1,10 @@
-import jwt from 'jsonwebtoken';
+const jwt = require('jsonwebtoken');
 
 if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET is not set. Copy .env.example to .env and fill it in.');
 }
 
-export function authenticate(req, res, next) {
+function authenticate(req, res, next) {
   const header = req.headers.authorization || '';
   const token = header.startsWith('Bearer ') ? header.slice(7) : null;
   if (!token) {
@@ -19,7 +19,7 @@ export function authenticate(req, res, next) {
   }
 }
 
-export function requireRole(...roles) {
+function requireRole(...roles) {
   return (req, res, next) => {
     if (!req.user || !roles.includes(req.user.role)) {
       return res.status(403).json({ error: 'Not allowed for your role' });
@@ -27,3 +27,5 @@ export function requireRole(...roles) {
     return next();
   };
 }
+
+module.exports = { authenticate, requireRole };

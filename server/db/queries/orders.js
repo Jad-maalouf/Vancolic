@@ -1,6 +1,6 @@
-import { query } from '../../db.js';
+const { query } = require('../../db.js');
 
-export async function openOrder({ tableId, clientName, openedBy }) {
+async function openOrder({ tableId, clientName, openedBy }) {
   const { rows } = await query(
     `insert into orders (table_id, client_name, opened_by)
      values ($1, $2, $3)
@@ -10,12 +10,12 @@ export async function openOrder({ tableId, clientName, openedBy }) {
   return rows[0];
 }
 
-export async function findOrderById(id) {
+async function findOrderById(id) {
   const { rows } = await query('select * from orders where id = $1', [id]);
   return rows[0] || null;
 }
 
-export async function listOpenOrders() {
+async function listOpenOrders() {
   const { rows } = await query(
     `select o.*, rt.label as table_label
      from orders o
@@ -26,7 +26,7 @@ export async function listOpenOrders() {
   return rows;
 }
 
-export async function closeOrder(id, { closedBy, status }) {
+async function closeOrder(id, { closedBy, status }) {
   const { rows } = await query(
     `update orders set status = $2, closed_by = $3
      where id = $1 and status = 'open'
@@ -35,3 +35,5 @@ export async function closeOrder(id, { closedBy, status }) {
   );
   return rows[0] || null;
 }
+
+module.exports = { openOrder, findOrderById, listOpenOrders, closeOrder };

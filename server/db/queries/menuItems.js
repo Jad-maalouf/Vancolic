@@ -1,6 +1,6 @@
-import { query } from '../../db.js';
+const { query } = require('../../db.js');
 
-export async function listActiveMenuItems() {
+async function listActiveMenuItems() {
   const { rows } = await query(
     `select id, category, subcategory, name, description, bottle_price, glass_price, sort_order
      from menu_items
@@ -10,19 +10,19 @@ export async function listActiveMenuItems() {
   return rows;
 }
 
-export async function listAllMenuItems() {
+async function listAllMenuItems() {
   const { rows } = await query(
     `select * from menu_items order by category, subcategory, sort_order`
   );
   return rows;
 }
 
-export async function findMenuItemById(id) {
+async function findMenuItemById(id) {
   const { rows } = await query('select * from menu_items where id = $1', [id]);
   return rows[0] || null;
 }
 
-export async function createMenuItem(item) {
+async function createMenuItem(item) {
   const { rows } = await query(
     `insert into menu_items
        (category, subcategory, name, description, bottle_price, glass_price, sort_order, active)
@@ -45,7 +45,7 @@ export async function createMenuItem(item) {
 // Full-row update. Callers (route handlers) are responsible for merging
 // partial edits onto the existing row first, so that e.g. clearing a price
 // to null is possible and distinguishable from "field not provided".
-export async function updateMenuItem(id, item) {
+async function updateMenuItem(id, item) {
   const { rows } = await query(
     `update menu_items set
        category = $2,
@@ -73,6 +73,15 @@ export async function updateMenuItem(id, item) {
   return rows[0] || null;
 }
 
-export async function deleteMenuItem(id) {
+async function deleteMenuItem(id) {
   await query('delete from menu_items where id = $1', [id]);
 }
+
+module.exports = {
+  listActiveMenuItems,
+  listAllMenuItems,
+  findMenuItemById,
+  createMenuItem,
+  updateMenuItem,
+  deleteMenuItem,
+};

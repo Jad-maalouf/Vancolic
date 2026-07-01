@@ -4,9 +4,9 @@
 //
 // Safe to re-run — each section skips itself if data already exists, so this
 // won't duplicate rows or clobber an existing manager account.
-import 'dotenv/config';
-import bcrypt from 'bcryptjs';
-import { pool, query } from '../server/db.js';
+require('dotenv/config');
+const bcrypt = require('bcryptjs');
+const { pool, query } = require('../server/db.js');
 
 // category codes must match the check constraint in server/db/schema.sql
 const MENU = [

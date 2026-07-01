@@ -1,7 +1,7 @@
-import express from 'express';
-import { authenticate, requireRole } from '../middleware/auth.js';
-import { asyncHandler } from '../lib/asyncHandler.js';
-import { listActiveOrderItems, findOrderItemById, updateOrderItemStatus } from '../db/queries/orderItems.js';
+const express = require('express');
+const { authenticate, requireRole } = require('../middleware/auth.js');
+const { asyncHandler } = require('../lib/asyncHandler.js');
+const { listActiveOrderItems, findOrderItemById, updateOrderItemStatus } = require('../db/queries/orderItems.js');
 
 const router = express.Router();
 
@@ -26,4 +26,4 @@ router.patch('/:id/status', authenticate, requireRole('bartender', 'manager'), a
   return res.json({ item });
 }));
 
-export default router;
+module.exports = router;

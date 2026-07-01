@@ -1,14 +1,14 @@
-import express from 'express';
-import { authenticate, requireRole } from '../middleware/auth.js';
-import { asyncHandler } from '../lib/asyncHandler.js';
-import {
+const express = require('express');
+const { authenticate, requireRole } = require('../middleware/auth.js');
+const { asyncHandler } = require('../lib/asyncHandler.js');
+const {
   listActiveMenuItems,
   listAllMenuItems,
   findMenuItemById,
   createMenuItem,
   updateMenuItem,
   deleteMenuItem,
-} from '../db/queries/menuItems.js';
+} = require('../db/queries/menuItems.js');
 
 const router = express.Router();
 
@@ -82,4 +82,4 @@ router.delete('/:id', authenticate, requireRole('manager'), asyncHandler(async (
   }
 }));
 
-export default router;
+module.exports = router;

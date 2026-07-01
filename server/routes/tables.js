@@ -1,8 +1,8 @@
-import express from 'express';
-import { authenticate, requireRole } from '../middleware/auth.js';
-import { asyncHandler } from '../lib/asyncHandler.js';
-import { listTableOverview, findTableById, findOpenOrderForTable } from '../db/queries/tables.js';
-import { openOrder } from '../db/queries/orders.js';
+const express = require('express');
+const { authenticate, requireRole } = require('../middleware/auth.js');
+const { asyncHandler } = require('../lib/asyncHandler.js');
+const { listTableOverview, findTableById, findOpenOrderForTable } = require('../db/queries/tables.js');
+const { openOrder } = require('../db/queries/orders.js');
 
 const router = express.Router();
 
@@ -29,4 +29,4 @@ router.post('/:id/open', authenticate, requireRole('waiter', 'manager'), asyncHa
   return res.status(201).json({ order });
 }));
 
-export default router;
+module.exports = router;

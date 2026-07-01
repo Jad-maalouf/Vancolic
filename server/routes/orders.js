@@ -1,9 +1,9 @@
-import express from 'express';
-import { authenticate, requireRole } from '../middleware/auth.js';
-import { asyncHandler } from '../lib/asyncHandler.js';
-import { findOrderById, listOpenOrders, closeOrder } from '../db/queries/orders.js';
-import { listItemsForOrder, addOrderItem } from '../db/queries/orderItems.js';
-import { findMenuItemById } from '../db/queries/menuItems.js';
+const express = require('express');
+const { authenticate, requireRole } = require('../middleware/auth.js');
+const { asyncHandler } = require('../lib/asyncHandler.js');
+const { findOrderById, listOpenOrders, closeOrder } = require('../db/queries/orders.js');
+const { listItemsForOrder, addOrderItem } = require('../db/queries/orderItems.js');
+const { findMenuItemById } = require('../db/queries/menuItems.js');
 
 const router = express.Router();
 
@@ -66,4 +66,4 @@ router.patch('/:id/close', authenticate, requireRole('manager'), asyncHandler(as
   return res.json({ order });
 }));
 
-export default router;
+module.exports = router;
