@@ -6,7 +6,7 @@ export const CATEGORIES = [
   { id: 'beer', label: 'Beer', icon: 'beer.png' },
   { id: 'non_alcoholic', label: 'Non-Alcoholic', icon: 'non-alcoholic.png' },
   { id: 'vancolic_specialities', label: 'Vancolic Specialities', icon: 'logo.png' },
-  { id: 'shisha', label: 'Shisha', icon: 'shisha.jpg' },
+  { id: 'shisha', label: 'Shisha', icon: 'shisha.png' },
 ];
 
 export function formatPrice(value) {
