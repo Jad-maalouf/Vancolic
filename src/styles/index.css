@@ -109,6 +109,14 @@ table {
   border-collapse: collapse;
   margin-bottom: 5px;
 }
+/* client-facing note under tables whose items take a mixer (e.g. Red Bull +$1) */
+.mixer-note {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #0d5b72;
+  margin: 0 0 12px;
+  padding: 0 10px;
+}
 .category th,
 .category td,
 .manager-table th,
@@ -377,6 +385,15 @@ button {
   padding: 10px;
   box-sizing: border-box;
   width: 100%;
+}
+.add-note-form .mixer-option {
+  flex-direction: row;
+  align-items: center;
+  font-weight: bold;
+}
+.add-note-form .mixer-option input {
+  width: auto;
+  margin: 0;
 }
 /* ---- status badges ---- */
 

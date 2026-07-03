@@ -65,16 +65,24 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
   const [error, setError] = useState(null);
   const [pendingAdd, setPendingAdd] = useState(null);
   const [noteDraft, setNoteDraft] = useState('');
+  const [mixerDraft, setMixerDraft] = useState(false);
 
-  async function submitAdd(menuItem, priceType, notes) {
+  async function submitAdd(menuItem, priceType, notes, withMixer) {
     setAddingId(`${menuItem.id}-${priceType}`);
     setError(null);
     try {
-      await api.addOrderItem(orderId, { menuItemId: menuItem.id, priceType, quantity: 1, notes: notes.trim() || null });
+      await api.addOrderItem(orderId, {
+        menuItemId: menuItem.id,
+        priceType,
+        quantity: 1,
+        notes: notes.trim() || null,
+        withMixer: withMixer || undefined,
+      });
       await refetchItems();
       onTablesChanged();
       setPendingAdd(null);
       setNoteDraft('');
+      setMixerDraft(false);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -133,7 +141,7 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
                     label="Add bottle"
                     className="icon-button-neutral icon-button-sm"
                     disabled={addingId === `${item.id}-bottle`}
-                    onClick={() => { setPendingAdd({ menuItem: item, priceType: 'bottle' }); setNoteDraft(''); }}
+                    onClick={() => { setPendingAdd({ menuItem: item, priceType: 'bottle' }); setNoteDraft(''); setMixerDraft(false); }}
                   />
                 ) : null}
                 {item.glass_price != null ? (
@@ -142,7 +150,7 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
                     label={item.bottle_price != null ? 'Add glass' : 'Add'}
                     className="icon-button-neutral icon-button-sm"
                     disabled={addingId === `${item.id}-glass`}
-                    onClick={() => { setPendingAdd({ menuItem: item, priceType: 'glass' }); setNoteDraft(''); }}
+                    onClick={() => { setPendingAdd({ menuItem: item, priceType: 'glass' }); setNoteDraft(''); setMixerDraft(false); }}
                   />
                 ) : null}
               </div>
@@ -158,12 +166,22 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
             onClick={(e) => e.stopPropagation()}
             onSubmit={(e) => {
               e.preventDefault();
-              submitAdd(pendingAdd.menuItem, pendingAdd.priceType, noteDraft);
+              submitAdd(pendingAdd.menuItem, pendingAdd.priceType, noteDraft, mixerDraft);
             }}
           >
             <h3>
               Add {pendingAdd.menuItem.name} ({pendingAdd.priceType === 'bottle' ? 'Bottle' : 'Glass'})
             </h3>
+            {pendingAdd.priceType === 'glass' && pendingAdd.menuItem.mixer_price != null ? (
+              <label className="mixer-option">
+                <input
+                  type="checkbox"
+                  checked={mixerDraft}
+                  onChange={(e) => setMixerDraft(e.target.checked)}
+                />
+                with {pendingAdd.menuItem.mixer_label} (+{formatPrice(pendingAdd.menuItem.mixer_price)})
+              </label>
+            ) : null}
             <label>
               Note for the bartender (optional)
               <input

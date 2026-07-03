@@ -35,7 +35,7 @@ router.post('/:id/items', authenticate, requireRole('waiter', 'manager'), asyncH
     return res.status(404).json({ error: 'Open order not found' });
   }
 
-  const { menuItemId, priceType, quantity, notes } = req.body || {};
+  const { menuItemId, priceType, quantity, notes, withMixer } = req.body || {};
   if (!menuItemId || !['bottle', 'glass'].includes(priceType)) {
     return res.status(400).json({ error: 'menuItemId and priceType ("bottle" or "glass") are required' });
   }
@@ -48,9 +48,15 @@ router.post('/:id/items', authenticate, requireRole('waiter', 'manager'), asyncH
   if (!menuItem || !menuItem.active) {
     return res.status(404).json({ error: 'Menu item not found' });
   }
-  const unitPrice = priceType === 'bottle' ? menuItem.bottle_price : menuItem.glass_price;
+  let unitPrice = priceType === 'bottle' ? menuItem.bottle_price : menuItem.glass_price;
   if (unitPrice == null) {
     return res.status(400).json({ error: `This item has no ${priceType} price` });
+  }
+  if (withMixer) {
+    if (menuItem.mixer_price == null || priceType !== 'glass') {
+      return res.status(400).json({ error: 'This item cannot be ordered with a mixer' });
+    }
+    unitPrice = Number(unitPrice) + Number(menuItem.mixer_price);
   }
 
   const item = await addOrderItem({
@@ -61,6 +67,7 @@ router.post('/:id/items', authenticate, requireRole('waiter', 'manager'), asyncH
     quantity: Number(quantity) > 0 ? Number(quantity) : 1,
     notes: trimmedNotes || null,
     orderedBy: req.user.id,
+    mixerLabel: withMixer ? menuItem.mixer_label : null,
   });
   return res.status(201).json({ item });
 }));

@@ -45,6 +45,7 @@ const MENU = [
   {
     category: 'spirits',
     subcategory: 'Vodka',
+    mixer: ['Red Bull', 1],
     items: [
       ['Stolichnaya', 45, 5],
       ['Russian Standard', 45, 5],
@@ -71,6 +72,7 @@ const MENU = [
   {
     category: 'spirits',
     subcategory: 'Jagermeister',
+    mixer: ['Red Bull', 1],
     items: [['Jagermeister', 50, 5]],
   },
   {
@@ -111,17 +113,18 @@ const MENU = [
     subcategory: 'International Cocktails',
     singlePrice: true,
     items: [
+      ['Margarita', 5, null, true, 'Tequila, lime juice, triple sec'],
+      ['Margarita passion fruit', 6, null, true, 'Tequila, lime juice, triple sec, passion fruit'],
+      ['Margarita strawberry', 6, null, true, 'Tequila, lime juice, triple sec, strawberry'],
       ['Mojito', 6, null, true, 'Rum, mint, lime juice, sugar, soda water'],
       ['Gin Basil Smash', 5, null, true, 'Gin, basil, simple syrup, lime juice'],
       ['Passion Fruit Martini', 6, null, true, 'Vokda, Passion fruit, Passion liqueur, Lime'],
-      ['Margarita', 5, null, true, 'Tequila, lime juice, triple sec'],
       ['Jager bomb', 5, null, true, 'jagermeister, energy drink'],
       ['BMW', 6, null, true, 'Baileys Irish Cream, Coconut Rum, Whiskey'],
       ['Pina Colada', 6, null, true, 'Rum, coconut cream, pineapple juice'],
       ['Sex on the Beach', 5, null, true, 'Vodka, peach liqueur, orange juice, cranberry juice'],
       ['Long Island', 6, null, true, 'Vodka, tequila, rum, gin, triple sec, lime juice, sugar, pepsi'],
       ['Tequila Sunrise', 5, null, true, 'Tequila, orange juice, grenadine'],
-      ['Whiskey Sour', 5, null, true, 'Bourbon whiskey, sugar, lime juice'],
       ['Blue Hawaii', 6, null, true, 'Rum, vodka, blue curacao, pineapple juice, lime, sugar'],
       ['Old Fashioned', 6, null, true, 'Bourbon whiskey, sugar, angostura bitters'],
       ['Godfather', 6, null, true, 'Whiksey, Amaretto'],
@@ -130,7 +133,7 @@ const MENU = [
     ],
   },
   {
-    category: 'cocktails',
+    category: 'vancolic_specialities',
     subcategory: 'Vancolic Special Cocktails',
     singlePrice: true,
     items: [
@@ -160,8 +163,8 @@ const MENU = [
     ],
   },
   {
-    category: 'shots',
-    subcategory: 'Special Joe’s Bar Shots',
+    category: 'vancolic_specialities',
+    subcategory: 'Vancolic Special Shots',
     singlePrice: true,
     items: [
       ['Pink Sky', 4, null, false, 'Vodka, baileys, strawberry'],
@@ -205,6 +208,14 @@ const MENU = [
       ['Water', 1],
     ],
   },
+  {
+    category: 'shisha',
+    subcategory: 'Shisha',
+    singlePrice: true,
+    items: [
+      ['Arguile', 7],
+    ],
+  },
 ];
 
 const TABLE_COUNT = 20;
@@ -219,15 +230,16 @@ async function seedMenu() {
   let inserted = 0;
   for (const block of MENU) {
     let sortOrder = 0;
+    const [mixerLabel = null, mixerPrice = null] = block.mixer ?? [];
     for (const row of block.items) {
       const [name, price1, price2, active = true, description = null] = row;
       const bottlePrice = block.singlePrice ? null : price1;
       const glassPrice = block.singlePrice ? price1 : price2;
       await query(
         `insert into menu_items
-           (category, subcategory, name, description, bottle_price, glass_price, sort_order, active)
-         values ($1, $2, $3, $4, $5, $6, $7, $8)`,
-        [block.category, block.subcategory, name, description, bottlePrice, glassPrice, sortOrder, active]
+           (category, subcategory, name, description, bottle_price, glass_price, sort_order, active, mixer_label, mixer_price)
+         values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+        [block.category, block.subcategory, name, description, bottlePrice, glassPrice, sortOrder, active, mixerLabel, mixerPrice]
       );
       sortOrder += 1;
       inserted += 1;

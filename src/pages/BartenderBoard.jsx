@@ -78,6 +78,7 @@ export default function BartenderBoard() {
             </div>
             <div className="order-item-card-name">
               {item.quantity} × {item.item_name}
+              {item.mixer_label ? ` + ${item.mixer_label}` : ''}
               <span className="order-item-card-type">
                 {' '}
                 ({item.price_type === 'bottle' ? 'Bottle' : 'Glass'})

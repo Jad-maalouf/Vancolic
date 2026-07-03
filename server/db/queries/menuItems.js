@@ -2,7 +2,7 @@ const { query } = require('../../db.js');
 
 async function listActiveMenuItems() {
   const { rows } = await query(
-    `select id, category, subcategory, name, description, bottle_price, glass_price, sort_order
+    `select id, category, subcategory, name, description, bottle_price, glass_price, sort_order, mixer_label, mixer_price
      from menu_items
      where active = true
      order by category, subcategory, sort_order`

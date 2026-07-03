@@ -30,6 +30,9 @@ create table menu_items (
   glass_price numeric(10,2),
   sort_order integer not null default 0,
   active boolean not null default true,
+  -- optional mixer add-on (e.g. Red Bull +$1 on vodka glasses); both null = not offered
+  mixer_label text,
+  mixer_price numeric(10,2),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint at_least_one_price check (bottle_price is not null or glass_price is not null)
@@ -65,6 +68,8 @@ create table order_items (
   price_type text not null check (price_type in ('bottle','glass')),
   unit_price numeric(10,2) not null,
   quantity integer not null default 1 check (quantity > 0),
+  -- set when the mixer surcharge was applied; unit_price already includes it
+  mixer_label text,
   notes text,
   status order_item_status not null default 'pending',
   ordered_by uuid not null references users(id),

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { CategoryTabs } from './CategoryTabs.jsx';
 import { TableScroll } from './TableScroll.jsx';
-import { formatPriceValue, groupMenuItems } from '../lib/pricing.js';
+import { formatPrice, formatPriceValue, groupMenuItems } from '../lib/pricing.js';
 
 // Shared by the public menu (read-only) and the waiter's order builder
 // (renderActions adds "add to order" controls per row).
@@ -20,6 +20,7 @@ export function MenuBrowser({ items, renderActions, defaultCategoryId }) {
       <div className="category" style={{ display: 'block' }}>
         {active.subcategories.map((sub) => {
           const hasBottle = sub.items.some((i) => i.bottle_price != null);
+          const mixer = sub.items.find((i) => i.mixer_price != null);
           return (
             <div key={sub.name}>
               <h2 className="sub_menu">{sub.name}</h2>
@@ -63,6 +64,11 @@ export function MenuBrowser({ items, renderActions, defaultCategoryId }) {
                   </tbody>
                 </table>
               </TableScroll>
+              {mixer ? (
+                <p className="mixer-note">
+                  * Add {mixer.mixer_label} to any glass for +{formatPrice(mixer.mixer_price)}
+                </p>
+              ) : null}
             </div>
           );
         })}

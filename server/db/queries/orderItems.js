@@ -1,11 +1,11 @@
 const { query } = require('../../db.js');
 
-async function addOrderItem({ orderId, menuItemId, priceType, unitPrice, quantity, notes, orderedBy }) {
+async function addOrderItem({ orderId, menuItemId, priceType, unitPrice, quantity, notes, orderedBy, mixerLabel }) {
   const { rows } = await query(
-    `insert into order_items (order_id, menu_item_id, price_type, unit_price, quantity, notes, ordered_by)
-     values ($1, $2, $3, $4, $5, $6, $7)
+    `insert into order_items (order_id, menu_item_id, price_type, unit_price, quantity, notes, ordered_by, mixer_label)
+     values ($1, $2, $3, $4, $5, $6, $7, $8)
      returning *`,
-    [orderId, menuItemId, priceType, unitPrice, quantity, notes || null, orderedBy]
+    [orderId, menuItemId, priceType, unitPrice, quantity, notes || null, orderedBy, mixerLabel || null]
   );
   return rows[0];
 }

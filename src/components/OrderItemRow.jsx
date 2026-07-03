@@ -10,6 +10,7 @@ export function OrderItemRow({ item }) {
       <td className="item">
         {item.item_name}
         {showPriceType ? ` (${item.price_type === 'bottle' ? 'Bottle' : 'Glass'})` : ''}
+        {item.mixer_label ? ` + ${item.mixer_label}` : ''}
         {item.notes ? (
           <>
             <br />
