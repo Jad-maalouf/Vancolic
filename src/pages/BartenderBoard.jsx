@@ -7,8 +7,22 @@ import { useActiveOrderItems } from '../hooks/useOrderItems.js';
 import { api } from '../api/apiClient.js';
 
 const NEXT_STATUS = { pending: 'preparing', preparing: 'served' };
-const NEXT_LABEL = { pending: 'Start preparing', preparing: 'Mark served' };
+const NEXT_LABEL = { pending: 'Preparing', preparing: 'Serving' };
 const NEXT_ICON = { pending: PlayIcon, preparing: CheckIcon };
+
+// Group active items by table, keeping the overall created_at order:
+// groups appear in the order their first item came in, items keep order within.
+function groupByTable(items) {
+  const groups = new Map();
+  for (const item of items) {
+    const key = item.order_id;
+    if (!groups.has(key)) {
+      groups.set(key, { key, table_label: item.table_label, client_name: item.client_name, items: [] });
+    }
+    groups.get(key).items.push(item);
+  }
+  return [...groups.values()];
+}
 
 export default function BartenderBoard() {
   const { items, loading, error, refetch } = useActiveOrderItems();
@@ -69,34 +83,44 @@ export default function BartenderBoard() {
 
       {!loading && items.length === 0 ? <p>No pending items — you're caught up.</p> : null}
 
-      <div className="order-item-cards">
-        {items.map((item) => (
-          <div key={item.id} className={`order-item-card status-${item.status}`}>
-            <div className="order-item-card-table">
-              {item.table_label}
-              {item.client_name ? ` — ${item.client_name}` : ''}
+      <div className="table-order-groups">
+        {groupByTable(items).map((group) => (
+          <div key={group.key} className="table-order-group">
+            <div className="table-order-group-header">
+              {group.table_label}
+              {group.client_name ? ` — ${group.client_name}` : ''}
             </div>
-            <div className="order-item-card-name">
-              {item.quantity} × {item.item_name}
-              {item.mixer_label ? ` + ${item.mixer_label}` : ''}
-              <span className="order-item-card-type">
-                {' '}
-                ({item.price_type === 'bottle' ? 'Bottle' : 'Glass'})
-              </span>
-              {item.notes ? <div className="order-item-card-note">Note: {item.notes}</div> : null}
-            </div>
-            <div className="order-item-card-footer">
-              <StatusBadge status={item.status} />
-              {NEXT_STATUS[item.status] ? (
-                <IconButton
-                  icon={NEXT_ICON[item.status]}
-                  label={updatingId === item.id ? 'Updating…' : NEXT_LABEL[item.status]}
-                  className="icon-button-neutral"
-                  disabled={updatingId === item.id}
-                  onClick={() => advance(item)}
-                />
-              ) : null}
-            </div>
+            <table className="table-order-items">
+              <tbody>
+                {group.items.map((item) => (
+                  <tr key={item.id} className={`status-${item.status}`}>
+                    <td className="table-order-item-name">
+                      {item.quantity} × {item.item_name}
+                      {item.mixer_label ? ` + ${item.mixer_label}` : ''}
+                      <span className="order-item-card-type">
+                        {' '}
+                        ({item.price_type === 'bottle' ? 'Bottle' : 'Glass'})
+                      </span>
+                      {item.notes ? <div className="order-item-card-note">Note: {item.notes}</div> : null}
+                    </td>
+                    <td className="table-order-item-status">
+                      <StatusBadge status={item.status} />
+                    </td>
+                    <td className="table-order-item-action">
+                      {NEXT_STATUS[item.status] ? (
+                        <IconButton
+                          icon={NEXT_ICON[item.status]}
+                          label={updatingId === item.id ? 'Updating…' : NEXT_LABEL[item.status]}
+                          className="icon-button-neutral"
+                          disabled={updatingId === item.id}
+                          onClick={() => advance(item)}
+                        />
+                      ) : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         ))}
       </div>

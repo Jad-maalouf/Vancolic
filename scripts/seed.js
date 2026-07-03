@@ -72,7 +72,6 @@ const MENU = [
   {
     category: 'spirits',
     subcategory: 'Jagermeister',
-    mixer: ['Red Bull', 1],
     items: [['Jagermeister', 50, 5]],
   },
   {
@@ -119,7 +118,7 @@ const MENU = [
       ['Mojito', 6, null, true, 'Rum, mint, lime juice, sugar, soda water'],
       ['Gin Basil Smash', 5, null, true, 'Gin, basil, simple syrup, lime juice'],
       ['Passion Fruit Martini', 6, null, true, 'Vokda, Passion fruit, Passion liqueur, Lime'],
-      ['Jager bomb', 5, null, true, 'jagermeister, energy drink'],
+      ['Jager bomb', 5, null, true, 'jagermeister, energy drink', ['Red Bull', 1]],
       ['BMW', 6, null, true, 'Baileys Irish Cream, Coconut Rum, Whiskey'],
       ['Pina Colada', 6, null, true, 'Rum, coconut cream, pineapple juice'],
       ['Sex on the Beach', 5, null, true, 'Vodka, peach liqueur, orange juice, cranberry juice'],
@@ -230,9 +229,9 @@ async function seedMenu() {
   let inserted = 0;
   for (const block of MENU) {
     let sortOrder = 0;
-    const [mixerLabel = null, mixerPrice = null] = block.mixer ?? [];
     for (const row of block.items) {
-      const [name, price1, price2, active = true, description = null] = row;
+      const [name, price1, price2, active = true, description = null, itemMixer = null] = row;
+      const [mixerLabel = null, mixerPrice = null] = itemMixer ?? block.mixer ?? [];
       const bottlePrice = block.singlePrice ? null : price1;
       const glassPrice = block.singlePrice ? price1 : price2;
       await query(

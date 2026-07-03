@@ -1,9 +1,11 @@
 import { formatPrice } from '../lib/pricing.js';
 import { StatusBadge } from './StatusBadge.jsx';
+import { IconButton } from './IconButton.jsx';
+import { TrashIcon } from './icons.jsx';
 
 const TWO_PRICE_CATEGORIES = new Set(['spirits', 'wine_bubbles']);
 
-export function OrderItemRow({ item }) {
+export function OrderItemRow({ item, onRemove, removing }) {
   const showPriceType = TWO_PRICE_CATEGORIES.has(item.category);
   return (
     <tr>
@@ -23,6 +25,17 @@ export function OrderItemRow({ item }) {
       <td className="price">
         <StatusBadge status={item.status} />
       </td>
+      {onRemove ? (
+        <td className="price">
+          <IconButton
+            icon={TrashIcon}
+            label={removing ? 'Removing…' : 'Remove'}
+            className="icon-button-danger icon-button-sm"
+            disabled={removing}
+            onClick={() => onRemove(item)}
+          />
+        </td>
+      ) : null}
     </tr>
   );
 }

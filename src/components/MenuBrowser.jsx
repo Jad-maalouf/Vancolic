@@ -20,7 +20,12 @@ export function MenuBrowser({ items, renderActions, defaultCategoryId }) {
       <div className="category" style={{ display: 'block' }}>
         {active.subcategories.map((sub) => {
           const hasBottle = sub.items.some((i) => i.bottle_price != null);
-          const mixer = sub.items.find((i) => i.mixer_price != null);
+          const mixerItems = sub.items.filter((i) => i.mixer_price != null);
+          const mixer = mixerItems[0];
+          const mixerTarget =
+            mixerItems.length === sub.items.length
+              ? 'any glass'
+              : mixerItems.map((i) => i.name).join(', ');
           return (
             <div key={sub.name}>
               <h2 className="sub_menu">{sub.name}</h2>
@@ -66,7 +71,7 @@ export function MenuBrowser({ items, renderActions, defaultCategoryId }) {
               </TableScroll>
               {mixer ? (
                 <p className="mixer-note">
-                  * Add {mixer.mixer_label} to any glass for +{formatPrice(mixer.mixer_price)}
+                  * Add {mixer.mixer_label} to {mixerTarget} for +{formatPrice(mixer.mixer_price)}
                 </p>
               ) : null}
             </div>

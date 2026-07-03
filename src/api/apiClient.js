@@ -55,6 +55,7 @@ export const api = {
   getActiveOrderItems: () => request('/order-items'),
   updateOrderItemStatus: (id, status) =>
     request(`/order-items/${id}/status`, { method: 'PATCH', body: { status } }),
+  removeOrderItem: (id) => request(`/order-items/${id}`, { method: 'DELETE' }),
 
   getUsers: () => request('/users'),
   createUser: (payload) => request('/users', { method: 'POST', body: payload }),

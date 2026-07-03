@@ -427,33 +427,54 @@ button {
 
 /* ---- bartender board ---- */
 
-.order-item-cards {
+.table-order-groups {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 12px;
   max-width: 1000px;
   margin: 16px auto;
   padding: 0 16px;
+  align-items: start;
 }
-.order-item-card {
+.table-order-group {
   background: #fff;
   border-radius: 8px;
-  padding: 14px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+.table-order-group-header {
+  font-weight: bold;
+  font-size: 0.95rem;
+  padding: 10px 14px;
+  background: #0d5b72;
+  color: #fff;
+}
+.table-order-items {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table-order-items tr {
+  border-top: 1px solid #eee;
   border-left: 6px solid #999;
 }
-.order-item-card.status-preparing {
+.table-order-items tr.status-preparing {
   border-left-color: #00ace5;
 }
-.order-item-card.status-served {
+.table-order-items tr.status-served {
   border-left-color: #4caf50;
 }
-.order-item-card-table {
-  font-weight: bold;
-  font-size: 0.9rem;
+.table-order-items td {
+  padding: 10px 8px;
+  vertical-align: middle;
 }
-.order-item-card-name {
-  margin: 8px 0;
+.table-order-item-name {
+  width: 100%;
+  padding-left: 12px !important;
+}
+.table-order-item-status,
+.table-order-item-action {
+  white-space: nowrap;
+  padding-right: 12px !important;
 }
 .order-item-card-type {
   font-size: 0.8rem;
@@ -474,13 +495,6 @@ button {
   font-size: 0.8rem;
   font-style: italic;
   opacity: 0.75;
-}
-.order-item-card-footer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
 }
 /* ---- manager dashboard ---- */
 
@@ -634,9 +648,12 @@ button {
     margin-right: 8px;
   }
   .table-grid,
-  .order-item-cards {
+  .table-order-groups {
     padding: 0 8px;
     gap: 8px;
+  }
+  .table-order-groups {
+    grid-template-columns: 1fr;
   }
   .order-builder,
   .manager-tab {

@@ -62,6 +62,7 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
   const { items: orderItems, loading: itemsLoading, refetch: refetchItems } = useOrderItems(orderId);
   const { items: menuItems, loading: menuLoading } = useMenuItems();
   const [addingId, setAddingId] = useState(null);
+  const [removingId, setRemovingId] = useState(null);
   const [error, setError] = useState(null);
   const [pendingAdd, setPendingAdd] = useState(null);
   const [noteDraft, setNoteDraft] = useState('');
@@ -90,6 +91,22 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
     }
   }
 
+  async function removeItem(item) {
+    if (!window.confirm(`Remove ${item.item_name} from this order?`)) return;
+    setRemovingId(item.id);
+    setError(null);
+    try {
+      await api.removeOrderItem(item.id);
+      await refetchItems();
+      onTablesChanged();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setRemovingId(null);
+    }
+  }
+
+  const visibleItems = orderItems.filter((item) => item.status !== 'cancelled');
   const total = computeOrderTotal(orderItems);
 
   return (
@@ -104,7 +121,7 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
         <h3>Current order — {formatPrice(total)}</h3>
         {itemsLoading ? (
           <p>Loading order…</p>
-        ) : orderItems.length === 0 ? (
+        ) : visibleItems.length === 0 ? (
           <p>No items yet — add from the menu below.</p>
         ) : (
           <TableScroll>
@@ -115,9 +132,15 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
                   <th className="price">Qty</th>
                   <th className="price">Total</th>
                   <th className="price">Status</th>
+                  <th className="price">Remove</th>
                 </tr>
-                {orderItems.map((item) => (
-                  <OrderItemRow key={item.id} item={item} />
+                {visibleItems.map((item) => (
+                  <OrderItemRow
+                    key={item.id}
+                    item={item}
+                    onRemove={removeItem}
+                    removing={removingId === item.id}
+                  />
                 ))}
               </tbody>
             </table>

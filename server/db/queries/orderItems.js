@@ -32,6 +32,7 @@ async function listActiveOrderItems() {
      join orders o on o.id = oi.order_id
      join restaurant_tables rt on rt.id = o.table_id
      where oi.status in ('pending', 'preparing')
+       and o.status = 'open'
      order by oi.created_at`
   );
   return rows;
