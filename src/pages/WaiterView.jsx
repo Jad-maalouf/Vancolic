@@ -10,7 +10,7 @@ import { useTables } from '../hooks/useTables.js';
 import { useMenuItems } from '../hooks/useMenuItems.js';
 import { useOrderItems } from '../hooks/useOrderItems.js';
 import { api } from '../api/apiClient.js';
-import { computeOrderTotal, formatPrice } from '../lib/pricing.js';
+import { computeOrderTotal, formatPrice, groupIdenticalItems } from '../lib/pricing.js';
 
 function OpenTableForm({ table, onCancel, onOpened }) {
   const [clientName, setClientName] = useState('');
@@ -91,12 +91,17 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
     }
   }
 
-  async function removeItem(item) {
-    if (!window.confirm(`Remove ${item.item_name} from this order?`)) return;
-    setRemovingId(item.id);
+  // `line` is a merged group of identical rows — each click removes one copy.
+  async function removeItem(line) {
+    const message =
+      line.quantity > 1
+        ? `Remove one ${line.item_name} (${line.quantity} on order)?`
+        : `Remove ${line.item_name} from this order?`;
+    if (!window.confirm(message)) return;
+    setRemovingId(line.id);
     setError(null);
     try {
-      await api.removeOrderItem(item.id);
+      await api.removeOrderItem(line.ids[line.ids.length - 1]);
       await refetchItems();
       onTablesChanged();
     } catch (err) {
@@ -106,7 +111,7 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
     }
   }
 
-  const visibleItems = orderItems.filter((item) => item.status !== 'cancelled');
+  const visibleItems = groupIdenticalItems(orderItems.filter((item) => item.status !== 'cancelled'));
   const total = computeOrderTotal(orderItems);
 
   return (
