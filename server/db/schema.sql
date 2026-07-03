@@ -22,7 +22,7 @@ create table users (
 
 create table menu_items (
   id uuid primary key default gen_random_uuid(),
-  category text not null check (category in ('spirits','wine_bubbles','cocktails','shots','beer','non_alcoholic')),
+  category text not null check (category in ('vancolic_specialities','shisha','spirits','wine_bubbles','cocktails','shots','beer','non_alcoholic')),
   subcategory text not null,
   name text not null,
   description text,
