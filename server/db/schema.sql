@@ -65,6 +65,7 @@ create table order_items (
   price_type text not null check (price_type in ('bottle','glass')),
   unit_price numeric(10,2) not null,
   quantity integer not null default 1 check (quantity > 0),
+  notes text,
   status order_item_status not null default 'pending',
   ordered_by uuid not null references users(id),
   created_at timestamptz not null default now(),

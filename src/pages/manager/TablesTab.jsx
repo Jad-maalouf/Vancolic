@@ -1,15 +1,21 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useTables } from '../../hooks/useTables.js';
 import { api } from '../../api/apiClient.js';
 import { formatPrice } from '../../lib/pricing.js';
 import { TableScroll } from '../../components/TableScroll.jsx';
 import { IconButton } from '../../components/IconButton.jsx';
+import { OrderItemsDetail } from '../../components/OrderItemsDetail.jsx';
 import { RefreshIcon, CashIcon, CloseIcon } from '../../components/icons.jsx';
 
 export function TablesTab() {
   const { tables, loading, error, refetch } = useTables();
   const [busyOrderId, setBusyOrderId] = useState(null);
   const [actionError, setActionError] = useState(null);
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
+
+  function toggleExpanded(orderId) {
+    setExpandedOrderId((current) => (current === orderId ? null : orderId));
+  }
 
   async function handleClose(orderId, status) {
     if (status === 'cancelled' && !window.confirm('Cancel this table\'s order without marking it paid?')) {
@@ -51,30 +57,39 @@ export function TablesTab() {
               <th></th>
             </tr>
             {openTables.map((t) => (
-              <tr key={t.table_id}>
-                <td>{t.label}</td>
-                <td>{t.client_name || '-'}</td>
-                <td>{formatPrice(t.running_total)}</td>
-                <td>{(t.pending_count ?? 0) + (t.preparing_count ?? 0)}</td>
-                <td>
-                  <div className="icon-button-group">
-                    <IconButton
-                      icon={CashIcon}
-                      label="Mark Paid & Close"
-                      className="icon-button-success"
-                      disabled={busyOrderId === t.open_order_id}
-                      onClick={() => handleClose(t.open_order_id, 'paid')}
-                    />
-                    <IconButton
-                      icon={CloseIcon}
-                      label="Cancel order"
-                      className="icon-button-danger"
-                      disabled={busyOrderId === t.open_order_id}
-                      onClick={() => handleClose(t.open_order_id, 'cancelled')}
-                    />
-                  </div>
-                </td>
-              </tr>
+              <Fragment key={t.table_id}>
+                <tr className="expandable-row" onClick={() => toggleExpanded(t.open_order_id)}>
+                  <td>{t.label}</td>
+                  <td>{t.client_name || '-'}</td>
+                  <td>{formatPrice(t.running_total)}</td>
+                  <td>{(t.pending_count ?? 0) + (t.preparing_count ?? 0)}</td>
+                  <td onClick={(e) => e.stopPropagation()}>
+                    <div className="icon-button-group">
+                      <IconButton
+                        icon={CashIcon}
+                        label="Mark Paid & Close"
+                        className="icon-button-success"
+                        disabled={busyOrderId === t.open_order_id}
+                        onClick={() => handleClose(t.open_order_id, 'paid')}
+                      />
+                      <IconButton
+                        icon={CloseIcon}
+                        label="Cancel order"
+                        className="icon-button-danger"
+                        disabled={busyOrderId === t.open_order_id}
+                        onClick={() => handleClose(t.open_order_id, 'cancelled')}
+                      />
+                    </div>
+                  </td>
+                </tr>
+                {expandedOrderId === t.open_order_id ? (
+                  <tr>
+                    <td colSpan={5}>
+                      <OrderItemsDetail orderId={t.open_order_id} />
+                    </td>
+                  </tr>
+                ) : null}
+              </Fragment>
             ))}
           </tbody>
         </table>

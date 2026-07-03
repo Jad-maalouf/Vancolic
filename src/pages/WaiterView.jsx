@@ -63,14 +63,18 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
   const { items: menuItems, loading: menuLoading } = useMenuItems();
   const [addingId, setAddingId] = useState(null);
   const [error, setError] = useState(null);
+  const [pendingAdd, setPendingAdd] = useState(null);
+  const [noteDraft, setNoteDraft] = useState('');
 
-  async function handleAdd(menuItem, priceType) {
+  async function submitAdd(menuItem, priceType, notes) {
     setAddingId(`${menuItem.id}-${priceType}`);
     setError(null);
     try {
-      await api.addOrderItem(orderId, { menuItemId: menuItem.id, priceType, quantity: 1 });
+      await api.addOrderItem(orderId, { menuItemId: menuItem.id, priceType, quantity: 1, notes: notes.trim() || null });
       await refetchItems();
       onTablesChanged();
+      setPendingAdd(null);
+      setNoteDraft('');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -129,7 +133,7 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
                     label="Add bottle"
                     className="icon-button-neutral icon-button-sm"
                     disabled={addingId === `${item.id}-bottle`}
-                    onClick={() => handleAdd(item, 'bottle')}
+                    onClick={() => { setPendingAdd({ menuItem: item, priceType: 'bottle' }); setNoteDraft(''); }}
                   />
                 ) : null}
                 {item.glass_price != null ? (
@@ -138,7 +142,7 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
                     label={item.bottle_price != null ? 'Add glass' : 'Add'}
                     className="icon-button-neutral icon-button-sm"
                     disabled={addingId === `${item.id}-glass`}
-                    onClick={() => handleAdd(item, 'glass')}
+                    onClick={() => { setPendingAdd({ menuItem: item, priceType: 'glass' }); setNoteDraft(''); }}
                   />
                 ) : null}
               </div>
@@ -146,6 +150,48 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
           />
         )}
       </section>
+
+      {pendingAdd ? (
+        <div className="add-note-overlay" onClick={() => setPendingAdd(null)}>
+          <form
+            className="add-note-form"
+            onClick={(e) => e.stopPropagation()}
+            onSubmit={(e) => {
+              e.preventDefault();
+              submitAdd(pendingAdd.menuItem, pendingAdd.priceType, noteDraft);
+            }}
+          >
+            <h3>
+              Add {pendingAdd.menuItem.name} ({pendingAdd.priceType === 'bottle' ? 'Bottle' : 'Glass'})
+            </h3>
+            <label>
+              Note for the bartender (optional)
+              <input
+                value={noteDraft}
+                onChange={(e) => setNoteDraft(e.target.value)}
+                placeholder="e.g. with orange, with redbull, no ice"
+                maxLength={200}
+                autoFocus
+              />
+            </label>
+            <div className="form-actions icon-button-group">
+              <IconButton
+                icon={CheckIcon}
+                label={addingId ? 'Adding…' : 'Add to order'}
+                type="submit"
+                className="icon-button-success"
+                disabled={!!addingId}
+              />
+              <IconButton
+                icon={CloseIcon}
+                label="Cancel"
+                className="icon-button-danger"
+                onClick={() => setPendingAdd(null)}
+              />
+            </div>
+          </form>
+        </div>
+      ) : null}
     </div>
   );
 }

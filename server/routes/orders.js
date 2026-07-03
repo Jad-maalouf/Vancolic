@@ -35,10 +35,14 @@ router.post('/:id/items', authenticate, requireRole('waiter', 'manager'), asyncH
     return res.status(404).json({ error: 'Open order not found' });
   }
 
-  const { menuItemId, priceType, quantity } = req.body || {};
+  const { menuItemId, priceType, quantity, notes } = req.body || {};
   if (!menuItemId || !['bottle', 'glass'].includes(priceType)) {
     return res.status(400).json({ error: 'menuItemId and priceType ("bottle" or "glass") are required' });
   }
+  if (notes != null && typeof notes !== 'string') {
+    return res.status(400).json({ error: 'notes must be a string' });
+  }
+  const trimmedNotes = notes ? notes.trim().slice(0, 200) : null;
 
   const menuItem = await findMenuItemById(menuItemId);
   if (!menuItem || !menuItem.active) {
@@ -55,6 +59,7 @@ router.post('/:id/items', authenticate, requireRole('waiter', 'manager'), asyncH
     priceType,
     unitPrice,
     quantity: Number(quantity) > 0 ? Number(quantity) : 1,
+    notes: trimmedNotes || null,
     orderedBy: req.user.id,
   });
   return res.status(201).json({ item });

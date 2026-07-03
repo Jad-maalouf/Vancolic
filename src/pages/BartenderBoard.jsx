@@ -78,6 +78,11 @@ export default function BartenderBoard() {
             </div>
             <div className="order-item-card-name">
               {item.quantity} × {item.item_name}
+              <span className="order-item-card-type">
+                {' '}
+                ({item.price_type === 'bottle' ? 'Bottle' : 'Glass'})
+              </span>
+              {item.notes ? <div className="order-item-card-note">Note: {item.notes}</div> : null}
             </div>
             <div className="order-item-card-footer">
               <StatusBadge status={item.status} />

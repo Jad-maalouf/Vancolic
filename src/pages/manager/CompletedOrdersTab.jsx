@@ -1,40 +1,14 @@
 import { Fragment, useState } from 'react';
 import { useClosedOrders } from '../../hooks/useClosedOrders.js';
-import { useOrderItems } from '../../hooks/useOrderItems.js';
 import { formatPrice } from '../../lib/pricing.js';
 import { TableScroll } from '../../components/TableScroll.jsx';
 import { IconButton } from '../../components/IconButton.jsx';
 import { StatusBadge } from '../../components/StatusBadge.jsx';
-import { OrderItemRow } from '../../components/OrderItemRow.jsx';
+import { OrderItemsDetail } from '../../components/OrderItemsDetail.jsx';
 import { RefreshIcon } from '../../components/icons.jsx';
 
 function today() {
   return new Date().toISOString().slice(0, 10);
-}
-
-function CompletedOrderItems({ orderId }) {
-  const { items, loading } = useOrderItems(orderId);
-
-  if (loading) return <p>Loading items…</p>;
-  if (items.length === 0) return <p>No items on this order.</p>;
-
-  return (
-    <TableScroll>
-      <table className="order-items-table">
-        <tbody>
-          <tr>
-            <th className="item">Item</th>
-            <th className="price">Qty</th>
-            <th className="price">Total</th>
-            <th className="price">Status</th>
-          </tr>
-          {items.map((item) => (
-            <OrderItemRow key={item.id} item={item} />
-          ))}
-        </tbody>
-      </table>
-    </TableScroll>
-  );
 }
 
 export function CompletedOrdersTab() {
@@ -80,7 +54,7 @@ export function CompletedOrdersTab() {
             </tr>
             {orders.map((o) => (
               <Fragment key={o.id}>
-                <tr className="completed-order-row" onClick={() => toggleExpanded(o.id)}>
+                <tr className="expandable-row" onClick={() => toggleExpanded(o.id)}>
                   <td>{o.table_label}</td>
                   <td>{o.client_name || '-'}</td>
                   <td>{formatPrice(o.total)}</td>
@@ -90,7 +64,7 @@ export function CompletedOrdersTab() {
                 {expandedId === o.id ? (
                   <tr>
                     <td colSpan={5}>
-                      <CompletedOrderItems orderId={o.id} />
+                      <OrderItemsDetail orderId={o.id} />
                     </td>
                   </tr>
                 ) : null}
