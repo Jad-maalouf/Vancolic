@@ -5,6 +5,7 @@ import { IconButton } from '../components/IconButton.jsx';
 import { RefreshIcon, DoubleCheckIcon, PlayIcon, CheckIcon } from '../components/icons.jsx';
 import { useActiveOrderItems } from '../hooks/useOrderItems.js';
 import { api } from '../api/apiClient.js';
+import { groupIdenticalItems } from '../lib/pricing.js';
 
 const NEXT_STATUS = { pending: 'preparing', preparing: 'served' };
 const NEXT_LABEL = { pending: 'Preparing', preparing: 'Serving' };
@@ -30,13 +31,14 @@ export default function BartenderBoard() {
   const [bulkUpdating, setBulkUpdating] = useState(false);
   const [actionError, setActionError] = useState(null);
 
-  async function advance(item) {
-    const next = NEXT_STATUS[item.status];
+  // `line` may be several identical rows merged together — advance all of them.
+  async function advance(line) {
+    const next = NEXT_STATUS[line.status];
     if (!next) return;
-    setUpdatingId(item.id);
+    setUpdatingId(line.id);
     setActionError(null);
     try {
-      await api.updateOrderItemStatus(item.id, next);
+      await Promise.all(line.ids.map((id) => api.updateOrderItemStatus(id, next)));
       await refetch();
     } catch (err) {
       setActionError(err.message);
@@ -92,7 +94,7 @@ export default function BartenderBoard() {
             </div>
             <table className="table-order-items">
               <tbody>
-                {group.items.map((item) => (
+                {groupIdenticalItems(group.items).map((item) => (
                   <tr key={item.id} className={`status-${item.status}`}>
                     <td className="table-order-item-name">
                       {item.quantity} × {item.item_name}

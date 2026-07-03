@@ -43,6 +43,24 @@ export function groupMenuItems(items) {
   }));
 }
 
+// Merge order lines that are exactly the same drink — same menu item, price
+// type, mixer, note, unit price AND status — into one line with a summed
+// quantity. `ids` collects the merged rows' ids so actions can hit all of them.
+export function groupIdenticalItems(items) {
+  const groups = new Map();
+  for (const item of items) {
+    const key = [item.menu_item_id, item.price_type, item.mixer_label ?? '', item.notes ?? '', item.unit_price, item.status].join('|');
+    const existing = groups.get(key);
+    if (existing) {
+      existing.quantity += item.quantity;
+      existing.ids.push(item.id);
+    } else {
+      groups.set(key, { ...item, ids: [item.id] });
+    }
+  }
+  return [...groups.values()];
+}
+
 export function computeOrderTotal(orderItems) {
   return orderItems
     .filter((i) => i.status !== 'cancelled')

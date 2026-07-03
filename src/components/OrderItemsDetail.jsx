@@ -1,6 +1,7 @@
 import { useOrderItems } from '../hooks/useOrderItems.js';
 import { TableScroll } from './TableScroll.jsx';
 import { OrderItemRow } from './OrderItemRow.jsx';
+import { groupIdenticalItems } from '../lib/pricing.js';
 
 export function OrderItemsDetail({ orderId }) {
   const { items, loading } = useOrderItems(orderId);
@@ -18,7 +19,7 @@ export function OrderItemsDetail({ orderId }) {
             <th className="price">Total</th>
             <th className="price">Status</th>
           </tr>
-          {items.map((item) => (
+          {groupIdenticalItems(items).map((item) => (
             <OrderItemRow key={item.id} item={item} />
           ))}
         </tbody>
