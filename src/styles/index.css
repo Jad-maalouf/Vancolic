@@ -85,6 +85,9 @@ a {
   font-size: 1rem;
   font-weight: bolder;
   color: #0d5b72;
+}
+/* underline the active category tab on staff screens only, not the public menu */
+.waiter-view .selected {
   border-bottom-color: #0d5b72;
 }
 
@@ -158,6 +161,7 @@ th.item {
 }
 .menu-edit-table .menu-edit-price input[type='number'] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .staff-login-link {
@@ -188,6 +192,11 @@ th.item {
 }
 .top-nav a:hover {
   text-decoration: underline;
+}
+/* line under the staff view you're currently on (waiter / bartender / manager) */
+.top-nav a.active {
+  border-bottom: 2px solid #ffcc33;
+  padding-bottom: 2px;
 }
 .top-nav-user {
   display: flex;
