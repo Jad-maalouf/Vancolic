@@ -127,7 +127,7 @@ const MENU = [
       ['Tequila Sunrise', 5, null, true, 'Tequila, orange juice, grenadine'],
       ['Jamaica', 5, null, true, 'Vodka, orange juice, pineapple juice, grenadine'],
       ['Blue Hawaii', 6, null, true, 'Rum, vodka, blue curacao, pineapple juice, lime, sugar'],
-      ['Old Fashioned', 6, null, true, 'Bourbon whiskey, sugar, orange bitters, aromatic bitters, orange zest'],
+      ['Old Fashioned', 6, null, true, 'Bourbon whiskey, sugar'],
       ['Godfather', 6, null, true, 'Whiskey, amaretto'],
       ['Cuba Libre', 5, null, true, 'Rum, pepsi, lime juice'],
       ['Negroni', 5, null, true, 'Gin, campari, sweet vermouth'],
@@ -139,9 +139,9 @@ const MENU = [
     singlePrice: true,
     items: [
       ['Midori sour', 6, null, true, 'Midori, sugar, lime juice'],
-      ['Whiskey sour', 6, null, true, 'Bourbon whiskey, lime juice, simple syrup, aromatic bitters'],
-      ['Amaretto sour', 6, null, true, 'Amaretto, simple syrup, lime juice, aromatic bitters'],
-      ['Gin sour', 5, null, true, 'Gin, simple syrup, lime juice, aromatic bitters'],
+      ['Whiskey sour', 6, null, true, 'Bourbon whiskey, lime juice, simple syrup'],
+      ['Amaretto sour', 6, null, true, 'Amaretto, simple syrup, lime juice'],
+      ['Gin sour', 5, null, true, 'Gin, simple syrup, lime juice'],
     ],
   },
   {

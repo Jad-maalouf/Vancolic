@@ -17,16 +17,17 @@ const UPDATES = [
   ['cocktails', 'Passion Fruit Martini', 'Vodka, passion fruit, simple syrup, lime juice'],
   ['cocktails', 'Mojito', 'Rum, mint, lime juice, sugar, sparkling water'],
   ['cocktails', 'Gin Basil Smash', 'Gin, basil, simple syrup, lime juice'],
-  ['cocktails', 'Old Fashioned', 'Bourbon whiskey, sugar, orange bitters, aromatic bitters, orange zest'],
+  ['cocktails', 'Old Fashioned', 'Bourbon whiskey, sugar'],
   ['cocktails', 'Long Island', 'Vodka, tequila, rum, gin, triple sec, lime juice, pepsi'],
   ['cocktails', 'Godfather', 'Whiskey, amaretto'],
   ['cocktails', 'BMW', 'Irish cream, coconut rum, whiskey'],
   ['cocktails', 'Negroni', 'Gin, campari, sweet vermouth'],
   // aqua faba is deliberately left out of customer-facing descriptions; it
   // only appears in the bartender recipes (src/data/recipes.js)
-  ['cocktails', 'Whiskey Sour', 'Bourbon whiskey, lime juice, simple syrup, aromatic bitters'],
-  ['cocktails', 'Amaretto Sour', 'Amaretto, simple syrup, lime juice, aromatic bitters'],
-  ['cocktails', 'Gin Sour', 'Gin, simple syrup, lime juice, aromatic bitters'],
+  // public descriptions never mention bitters or zest — bartender-only details
+  ['cocktails', 'Whiskey Sour', 'Bourbon whiskey, lime juice, simple syrup'],
+  ['cocktails', 'Amaretto Sour', 'Amaretto, simple syrup, lime juice'],
+  ['cocktails', 'Gin Sour', 'Gin, simple syrup, lime juice'],
 ];
 
 // items from the document that may be missing:
