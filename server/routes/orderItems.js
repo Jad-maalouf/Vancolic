@@ -1,7 +1,7 @@
 const express = require('express');
 const { authenticate, requireRole } = require('../middleware/auth.js');
 const { asyncHandler } = require('../lib/asyncHandler.js');
-const { listActiveOrderItems, findOrderItemById, updateOrderItemStatus } = require('../db/queries/orderItems.js');
+const { listActiveOrderItems, findOrderItemById, updateOrderItemStatus, decrementOrderItemQuantity } = require('../db/queries/orderItems.js');
 const { findOrderById } = require('../db/queries/orders.js');
 
 const router = express.Router();
@@ -27,8 +27,9 @@ router.patch('/:id/status', authenticate, requireRole('bartender', 'manager'), a
   return res.json({ item });
 }));
 
-// Remove (soft-cancel) an item from an open order. Any staff can do this;
-// cancelled items drop off the bartender board and are excluded from totals.
+// Remove ONE unit of an item from an open order. Any staff can do this.
+// Multi-quantity rows are decremented; the last unit soft-cancels the row,
+// which drops it off the bartender board and out of the totals.
 router.delete('/:id', authenticate, asyncHandler(async (req, res) => {
   const existing = await findOrderItemById(req.params.id);
   if (!existing || existing.status === 'cancelled') {
@@ -38,7 +39,13 @@ router.delete('/:id', authenticate, asyncHandler(async (req, res) => {
   if (!order || order.status !== 'open') {
     return res.status(400).json({ error: 'This order is already closed' });
   }
-  const item = await updateOrderItemStatus(req.params.id, 'cancelled');
+  let item = null;
+  if (existing.quantity > 1) {
+    item = await decrementOrderItemQuantity(req.params.id);
+  }
+  if (!item) {
+    item = await updateOrderItemStatus(req.params.id, 'cancelled');
+  }
   return res.json({ item });
 }));
 

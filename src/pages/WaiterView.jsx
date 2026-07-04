@@ -14,6 +14,7 @@ import { computeOrderTotal, formatPrice, groupIdenticalItems } from '../lib/pric
 
 function OpenTableForm({ table, onCancel, onOpened }) {
   const [clientName, setClientName] = useState('');
+  const [personsCount, setPersonsCount] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
@@ -22,7 +23,11 @@ function OpenTableForm({ table, onCancel, onOpened }) {
     setSubmitting(true);
     setError(null);
     try {
-      const { order } = await api.openTable(table.table_id, clientName.trim() || null);
+      const { order } = await api.openTable(
+        table.table_id,
+        clientName.trim() || null,
+        personsCount ? Number(personsCount) : null
+      );
       onOpened(order);
     } catch (err) {
       setError(err.message);
@@ -42,6 +47,17 @@ function OpenTableForm({ table, onCancel, onOpened }) {
           onChange={(e) => setClientName(e.target.value)}
           placeholder="e.g. John's group"
           autoFocus
+        />
+      </label>
+      <label>
+        Number of persons (optional)
+        <input
+          type="number"
+          min="1"
+          max="99"
+          value={personsCount}
+          onChange={(e) => setPersonsCount(e.target.value)}
+          placeholder="e.g. 4"
         />
       </label>
       <div className="form-actions icon-button-group">
@@ -95,8 +111,8 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
   async function removeItem(line) {
     const message =
       line.quantity > 1
-        ? `Remove one ${line.item_name} (${line.quantity} on order)?`
-        : `Remove ${line.item_name} from this order?`;
+        ? `Remove 1 ${line.item_name}? (${line.quantity} on order, ${line.quantity - 1} will remain)`
+        : `Remove 1 ${line.item_name} from this order?`;
     if (!window.confirm(message)) return;
     setRemovingId(line.id);
     setError(null);

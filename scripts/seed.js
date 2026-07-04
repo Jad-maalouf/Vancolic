@@ -244,7 +244,7 @@ const MENU = [
   },
 ];
 
-const TABLE_COUNT = 20;
+const TABLE_COUNT = 15;
 
 async function seedMenu() {
   const { rows } = await query('select count(*) from menu_items');

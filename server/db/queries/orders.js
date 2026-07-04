@@ -1,11 +1,11 @@
 const { query } = require('../../db.js');
 
-async function openOrder({ tableId, clientName, openedBy }) {
+async function openOrder({ tableId, clientName, personsCount, openedBy }) {
   const { rows } = await query(
-    `insert into orders (table_id, client_name, opened_by)
-     values ($1, $2, $3)
+    `insert into orders (table_id, client_name, persons_count, opened_by)
+     values ($1, $2, $3, $4)
      returning *`,
-    [tableId, clientName ?? null, openedBy]
+    [tableId, clientName ?? null, personsCount ?? null, openedBy]
   );
   return rows[0];
 }

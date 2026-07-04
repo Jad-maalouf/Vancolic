@@ -51,6 +51,7 @@ create table orders (
   id uuid primary key default gen_random_uuid(),
   table_id uuid not null references restaurant_tables(id) on delete restrict,
   client_name text,
+  persons_count integer check (persons_count > 0),
   opened_by uuid not null references users(id),
   status order_status not null default 'open',
   closed_by uuid references users(id),
@@ -148,7 +149,8 @@ select
   o.opened_by,
   ot.total as running_total,
   ot.pending_count,
-  ot.preparing_count
+  ot.preparing_count,
+  o.persons_count
 from restaurant_tables rt
 left join orders o on o.table_id = rt.id and o.status = 'open'
 left join order_totals ot on ot.order_id = o.id;

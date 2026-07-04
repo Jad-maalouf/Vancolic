@@ -43,7 +43,9 @@ export const api = {
   deleteMenuItem: (id) => request(`/menu/${id}`, { method: 'DELETE' }),
 
   getTables: () => request('/tables'),
-  openTable: (id, clientName) => request(`/tables/${id}/open`, { method: 'POST', body: { clientName } }),
+  openTable: (id, clientName, personsCount) =>
+    request(`/tables/${id}/open`, { method: 'POST', body: { clientName, personsCount } }),
+  renameTable: (id, label) => request(`/tables/${id}`, { method: 'PATCH', body: { label } }),
 
   getOrderItems: (orderId) => request(`/orders/${orderId}/items`),
   addOrderItem: (orderId, payload) => request(`/orders/${orderId}/items`, { method: 'POST', body: payload }),

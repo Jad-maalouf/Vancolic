@@ -51,4 +51,14 @@ async function updateOrderItemStatus(id, status) {
   return rows[0] || null;
 }
 
-module.exports = { addOrderItem, listItemsForOrder, listActiveOrderItems, findOrderItemById, updateOrderItemStatus };
+// Take one unit off a multi-quantity row. The quantity > 1 guard makes this a
+// no-op (returns null) on a single-unit row, so callers fall back to cancelling.
+async function decrementOrderItemQuantity(id) {
+  const { rows } = await query(
+    `update order_items set quantity = quantity - 1 where id = $1 and quantity > 1 returning *`,
+    [id]
+  );
+  return rows[0] || null;
+}
+
+module.exports = { addOrderItem, listItemsForOrder, listActiveOrderItems, findOrderItemById, updateOrderItemStatus, decrementOrderItemQuantity };

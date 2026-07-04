@@ -539,6 +539,25 @@ button {
   text-align: center;
   padding: 10px;
 }
+.table-rename-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.table-rename-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+.table-rename-item input {
+  flex: 1;
+  min-width: 0;
+}
 .menu-item-inactive {
   opacity: 0.5;
 }

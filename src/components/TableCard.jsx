@@ -13,7 +13,10 @@ export function TableCard({ table, onSelect }) {
       <div className="table-card-label">{table.label}</div>
       {isOpen ? (
         <>
-          <div className="table-card-client">{table.client_name || 'No name'}</div>
+          <div className="table-card-client">
+            {table.client_name || 'No name'}
+            {table.persons_count ? ` · ${table.persons_count} pers.` : ''}
+          </div>
           <div className="table-card-total">{formatPrice(table.running_total)}</div>
           {inProgress > 0 ? <div className="table-card-pending">{inProgress} in progress</div> : null}
         </>
