@@ -14,18 +14,18 @@ const { pool, query } = require('../server/db.js');
 // ingredient corrections for items that already exist (matched by name within
 // the category, case-insensitively)
 const UPDATES = [
-  ['cocktails', 'Passion Fruit Martini', 'Vodka, passion fruit purée, sugar syrup, lime juice'],
+  ['cocktails', 'Passion Fruit Martini', 'Vodka, passion fruit purée, simple syrup, lime juice'],
   ['cocktails', 'Mojito', 'Rum, mint, lime juice, sugar, sparkling water'],
-  ['cocktails', 'Gin Basil Smash', 'Gin, basil, sugar syrup, lime juice'],
+  ['cocktails', 'Gin Basil Smash', 'Gin, basil, simple syrup, lime juice'],
   ['cocktails', 'Old Fashioned', 'Bourbon whiskey, sugar, orange bitters, aromatic bitters, orange zest'],
   ['cocktails', 'Long Island', 'Vodka, tequila, rum, gin, triple sec, lime juice, pepsi'],
   ['cocktails', 'Godfather', 'Whiskey, amaretto, rosemary'],
   ['cocktails', 'Negroni', 'Gin, campari, sweet vermouth, lemon zest'],
   // aqua faba is deliberately left out of customer-facing descriptions; it
   // only appears in the bartender recipes (src/data/recipes.js)
-  ['cocktails', 'Whiskey Sour', 'Bourbon whiskey, lime juice, sugar syrup, aromatic bitters'],
-  ['cocktails', 'Amaretto Sour', 'Amaretto, sugar syrup, lime juice, aromatic bitters'],
-  ['cocktails', 'Gin Sour', 'Gin, sugar syrup, lime juice, aromatic bitters'],
+  ['cocktails', 'Whiskey Sour', 'Bourbon whiskey, lime juice, simple syrup, aromatic bitters'],
+  ['cocktails', 'Amaretto Sour', 'Amaretto, simple syrup, lime juice, aromatic bitters'],
+  ['cocktails', 'Gin Sour', 'Gin, simple syrup, lime juice, aromatic bitters'],
 ];
 
 // items from the document that may be missing: [category, subcategory, name, glassPrice, active, description]
@@ -42,7 +42,7 @@ const INSERTS = [
   // public descriptions are simplified on purpose (no brand names, bitters, or
   // garnish) — the full builds are bartender-only in src/data/recipes.js
   ['vancolic_specialities', 'Vancolic Special Cocktails', 'Pink Blue', 5, true, 'Gin, simple syrup, lime juice, grenadine, strawberry'],
-  ['vancolic_specialities', 'Vancolic Special Cocktails', 'Blues', 5, true, 'Gin, passion fruit, lime juice, sugar syrup, pineapple juice, blue curacao'],
+  ['vancolic_specialities', 'Vancolic Special Cocktails', 'Blues', 5, true, 'Gin, passion fruit, lime juice, simple syrup, pineapple juice, blue curacao'],
   ['vancolic_specialities', 'Vancolic Special Cocktails', 'Boulevardier', 5, true, 'Bourbon whiskey, campari, sweet vermouth'],
   ['vancolic_specialities', 'Vancolic Special Cocktails', 'Italian Smoker', 5, true, 'Amaretto, bourbon whiskey, jagermeister'],
 ];

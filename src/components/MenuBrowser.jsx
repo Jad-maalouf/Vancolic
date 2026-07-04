@@ -21,11 +21,9 @@ export function MenuBrowser({ items, renderActions, defaultCategoryId }) {
         {active.subcategories.map((sub) => {
           const hasBottle = sub.items.some((i) => i.bottle_price != null);
           const mixerItems = sub.items.filter((i) => i.mixer_price != null);
-          const mixer = mixerItems[0];
-          const mixerTarget =
-            mixerItems.length === sub.items.length
-              ? 'any glass'
-              : mixerItems.map((i) => i.name).join(', ');
+          // when the whole subcategory shares the mixer, one note under the
+          // table; otherwise the note renders inline under each item's name
+          const sharedMixer = mixerItems.length === sub.items.length ? mixerItems[0] : null;
           return (
             <div key={sub.name}>
               <h2 className="sub_menu">{sub.name}</h2>
@@ -54,6 +52,11 @@ export function MenuBrowser({ items, renderActions, defaultCategoryId }) {
                               <i>({item.description})</i>
                             </>
                           ) : null}
+                          {!sharedMixer && item.mixer_price != null ? (
+                            <div className="mixer-note-inline">
+                              * Add {item.mixer_label} +{formatPrice(item.mixer_price)}
+                            </div>
+                          ) : null}
                         </td>
                         {hasBottle ? (
                           <>
@@ -69,9 +72,9 @@ export function MenuBrowser({ items, renderActions, defaultCategoryId }) {
                   </tbody>
                 </table>
               </TableScroll>
-              {mixer ? (
+              {sharedMixer ? (
                 <p className="mixer-note">
-                  * Add {mixer.mixer_label} to {mixerTarget} +{formatPrice(mixer.mixer_price)}
+                  * Add {sharedMixer.mixer_label} to any glass +{formatPrice(sharedMixer.mixer_price)}
                 </p>
               ) : null}
             </div>

@@ -10,7 +10,7 @@ export const RECIPE_SECTIONS = [
       {
         name: 'Passion Fruit Martini',
         method: 'Shaker',
-        ingredients: ['45 ml vodka', '30 ml passion fruit purée', '10 ml sugar syrup', '20 ml lime juice'],
+        ingredients: ['45 ml vodka', '30 ml passion fruit purée', '10 ml simple syrup', '20 ml lime juice'],
       },
       {
         name: 'Margarita',
@@ -42,7 +42,7 @@ export const RECIPE_SECTIONS = [
       {
         name: 'Gin Basil',
         method: 'Shaker',
-        ingredients: ['60 ml gin', '30 ml sugar syrup', '30 ml lime juice', '4 basil leaves'],
+        ingredients: ['60 ml gin', '30 ml simple syrup', '30 ml lime juice', '4 basil leaves'],
       },
       {
         name: 'Gin Basil (dispenser batch)',
@@ -50,7 +50,7 @@ export const RECIPE_SECTIONS = [
         ingredients: [
           '400 ml gin',
           '300 ml lime juice',
-          '280 ml sugar syrup',
+          '280 ml simple syrup',
           '3 drops colorant',
           '10 basil leaves',
         ],
@@ -95,7 +95,7 @@ export const RECIPE_SECTIONS = [
           '20 ml vodka',
           '15 ml blue curacao',
           '90 ml pineapple juice',
-          '10 ml sugar syrup',
+          '10 ml simple syrup',
           '15 ml lime juice',
         ],
       },
@@ -139,7 +139,7 @@ export const RECIPE_SECTIONS = [
         ingredients: [
           '60 ml Jim Beam',
           '30 ml lime juice',
-          '30 ml sugar syrup',
+          '30 ml simple syrup',
           '10 ml aqua faba',
           '4–5 drops aromatic bitters',
         ],
@@ -155,7 +155,7 @@ export const RECIPE_SECTIONS = [
         method: 'Shaker',
         ingredients: [
           '60 ml Disaronno',
-          '30 ml sugar syrup',
+          '30 ml simple syrup',
           '30 ml lime juice',
           '10 ml aqua faba',
           'Drops of aromatic bitters',
@@ -166,7 +166,7 @@ export const RECIPE_SECTIONS = [
         method: 'Shaker',
         ingredients: [
           '60 ml gin',
-          '30 ml sugar syrup',
+          '30 ml simple syrup',
           '30 ml lime juice',
           '10 ml aqua faba',
           'Drops of aromatic bitters',
@@ -175,7 +175,7 @@ export const RECIPE_SECTIONS = [
       {
         name: 'Midori Sour',
         method: 'Shaker',
-        ingredients: ['Midori', 'Sugar syrup', 'Lime juice'],
+        ingredients: ['Midori', 'Simple syrup', 'Lime juice'],
       },
       {
         name: 'Jager Bomb',
@@ -246,7 +246,7 @@ export const RECIPE_SECTIONS = [
         method: 'Shaker',
         ingredients: [
           '60 ml pink gin',
-          '30 ml sugar syrup',
+          '30 ml simple syrup',
           '30 ml lime juice',
           '15 ml grenadine',
           '15 ml strawberry',
@@ -261,7 +261,7 @@ export const RECIPE_SECTIONS = [
           '50 ml gin',
           '20 ml passion fruit',
           '15 ml lime juice',
-          '10 ml sugar syrup',
+          '10 ml simple syrup',
           '40 ml pineapple juice',
           '10 ml curacao',
           'Aquafaba',
