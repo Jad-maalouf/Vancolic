@@ -14,13 +14,14 @@ const { pool, query } = require('../server/db.js');
 // ingredient corrections for items that already exist (matched by name within
 // the category, case-insensitively)
 const UPDATES = [
-  ['cocktails', 'Passion Fruit Martini', 'Vodka, passion fruit purée, simple syrup, lime juice'],
+  ['cocktails', 'Passion Fruit Martini', 'Vodka, passion fruit, simple syrup, lime juice'],
   ['cocktails', 'Mojito', 'Rum, mint, lime juice, sugar, sparkling water'],
   ['cocktails', 'Gin Basil Smash', 'Gin, basil, simple syrup, lime juice'],
   ['cocktails', 'Old Fashioned', 'Bourbon whiskey, sugar, orange bitters, aromatic bitters, orange zest'],
   ['cocktails', 'Long Island', 'Vodka, tequila, rum, gin, triple sec, lime juice, pepsi'],
-  ['cocktails', 'Godfather', 'Whiskey, amaretto, rosemary'],
-  ['cocktails', 'Negroni', 'Gin, campari, sweet vermouth, lemon zest'],
+  ['cocktails', 'Godfather', 'Whiskey, amaretto'],
+  ['cocktails', 'BMW', 'Irish cream, coconut rum, whiskey'],
+  ['cocktails', 'Negroni', 'Gin, campari, sweet vermouth'],
   // aqua faba is deliberately left out of customer-facing descriptions; it
   // only appears in the bartender recipes (src/data/recipes.js)
   ['cocktails', 'Whiskey Sour', 'Bourbon whiskey, lime juice, simple syrup, aromatic bitters'],
@@ -28,9 +29,10 @@ const UPDATES = [
   ['cocktails', 'Gin Sour', 'Gin, simple syrup, lime juice, aromatic bitters'],
 ];
 
-// items from the document that may be missing: [category, subcategory, name, glassPrice, active, description]
+// items from the document that may be missing:
+// [category, subcategory, name, glassPrice, active, description, mixerLabel, mixerPrice]
 const INSERTS = [
-  ['cocktails', 'International Cocktails', 'Blue Ice Tea', 6, true, 'Vodka, blue curacao, apple juice, XXL energy drink'],
+  ['cocktails', 'International Cocktails', 'Blue Ice Tea', 6, true, 'Vodka, blue curacao, apple juice, XXL energy drink', 'Red Bull', 1],
   ['cocktails', 'International Cocktails', 'Jamaica', 5, true, 'Vodka, orange juice, pineapple juice, grenadine'],
   // shots carry no public description — their recipes are bartender-only (src/data/recipes.js)
   ['shots', 'Shots', 'Alien Brain Damage', 3, true, null],
@@ -86,28 +88,30 @@ async function main() {
     console.log(`cleared  shots: ${row.name} — description removed`);
   }
 
-  for (const [category, subcategory, name, glassPrice, active, description] of INSERTS) {
+  for (const [category, subcategory, name, glassPrice, active, description, mixerLabel = null, mixerPrice = null] of INSERTS) {
     const { rows: existing } = await query(
       'select 1 from menu_items where category = $1 and lower(name) = lower($2)',
       [category, name]
     );
     if (existing.length > 0) {
-      // already present — still keep its description in sync with the document
+      // already present — still keep its description and mixer in sync
       const { rowCount } = await query(
         `update menu_items
-            set description = $1
+            set description = $1, mixer_label = $4, mixer_price = $5
           where category = $2 and lower(name) = lower($3)
-            and description is distinct from $1`,
-        [description, category, name]
+            and (description is distinct from $1
+                 or mixer_label is distinct from $4
+                 or mixer_price is distinct from $5)`,
+        [description, category, name, mixerLabel, mixerPrice]
       );
-      console.log(`exists   ${category}: ${name} — ${rowCount > 0 ? 'description updated' : 'skipped'}`);
+      console.log(`exists   ${category}: ${name} — ${rowCount > 0 ? 'updated' : 'skipped'}`);
       continue;
     }
     await query(
-      `insert into menu_items (category, subcategory, name, description, glass_price, active, sort_order)
-       values ($1, $2, $3, $4, $5, $6,
+      `insert into menu_items (category, subcategory, name, description, glass_price, active, mixer_label, mixer_price, sort_order)
+       values ($1, $2, $3, $4, $5, $6, $7, $8,
                (select coalesce(max(sort_order), -1) + 1 from menu_items where category = $1 and subcategory = $2))`,
-      [category, subcategory, name, description, glassPrice, active]
+      [category, subcategory, name, description, glassPrice, active, mixerLabel, mixerPrice]
     );
     console.log(`inserted ${category}/${subcategory}: ${name}`);
   }
