@@ -5,7 +5,7 @@ import { OrderItemRow } from '../components/OrderItemRow.jsx';
 import { MenuBrowser } from '../components/MenuBrowser.jsx';
 import { TableScroll } from '../components/TableScroll.jsx';
 import { IconButton } from '../components/IconButton.jsx';
-import { CheckIcon, CloseIcon, BackIcon, PlusIcon, BottleIcon, GlassIcon } from '../components/icons.jsx';
+import { CheckIcon, CloseIcon, BackIcon, PlusIcon, BottleIcon, GlassIcon, PencilIcon } from '../components/icons.jsx';
 import { useTables } from '../hooks/useTables.js';
 import { useMenuItems } from '../hooks/useMenuItems.js';
 import { useOrderItems } from '../hooks/useOrderItems.js';
@@ -83,6 +83,41 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
   const [pendingAdd, setPendingAdd] = useState(null);
   const [noteDraft, setNoteDraft] = useState('');
   const [mixerDraft, setMixerDraft] = useState(false);
+  // client name / persons live on the open order; kept locally so the header
+  // updates immediately after an edit without refetching the tables list
+  const [details, setDetails] = useState({
+    client_name: table.client_name ?? null,
+    persons_count: table.persons_count ?? null,
+  });
+  const [editingDetails, setEditingDetails] = useState(false);
+  const [nameDraft, setNameDraft] = useState('');
+  const [personsDraft, setPersonsDraft] = useState('');
+  const [savingDetails, setSavingDetails] = useState(false);
+
+  function startEditDetails() {
+    setNameDraft(details.client_name || '');
+    setPersonsDraft(details.persons_count ? String(details.persons_count) : '');
+    setEditingDetails(true);
+  }
+
+  async function saveDetails(e) {
+    e.preventDefault();
+    setSavingDetails(true);
+    setError(null);
+    try {
+      const { order } = await api.updateOrderDetails(orderId, {
+        clientName: nameDraft.trim() || null,
+        personsCount: personsDraft ? Number(personsDraft) : null,
+      });
+      setDetails({ client_name: order.client_name, persons_count: order.persons_count });
+      setEditingDetails(false);
+      onTablesChanged();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSavingDetails(false);
+    }
+  }
 
   async function submitAdd(menuItem, priceType, notes, withMixer) {
     setAddingId(`${menuItem.id}-${priceType}`);
@@ -133,9 +168,16 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
   return (
     <div className="order-builder">
       <IconButton icon={BackIcon} label="Back to tables" className="icon-button-outline" onClick={onBack} />
-      <h2>
+      <h2 className="order-builder-title">
         {table.label}
-        {table.client_name ? ` — ${table.client_name}` : ''}
+        {details.client_name ? ` · ${details.client_name}` : ''}
+        {details.persons_count ? ` · ${details.persons_count} persons` : ''}
+        <IconButton
+          icon={PencilIcon}
+          label="Edit client name and persons"
+          className="icon-button-neutral icon-button-sm"
+          onClick={startEditDetails}
+        />
       </h2>
 
       <section>
@@ -202,6 +244,50 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
           />
         )}
       </section>
+
+      {editingDetails ? (
+        <div className="add-note-overlay" onClick={() => setEditingDetails(false)}>
+          <form className="add-note-form" onClick={(e) => e.stopPropagation()} onSubmit={saveDetails}>
+            <h3>Edit {table.label}</h3>
+            <label>
+              Client / party name
+              <input
+                value={nameDraft}
+                onChange={(e) => setNameDraft(e.target.value)}
+                placeholder="e.g. John's group"
+                maxLength={80}
+                autoFocus
+              />
+            </label>
+            <label>
+              Number of persons
+              <input
+                type="number"
+                min="1"
+                max="99"
+                value={personsDraft}
+                onChange={(e) => setPersonsDraft(e.target.value)}
+                placeholder="e.g. 4"
+              />
+            </label>
+            <div className="form-actions icon-button-group">
+              <IconButton
+                icon={CheckIcon}
+                label={savingDetails ? 'Saving…' : 'Save'}
+                type="submit"
+                className="icon-button-success"
+                disabled={savingDetails}
+              />
+              <IconButton
+                icon={CloseIcon}
+                label="Cancel"
+                className="icon-button-danger"
+                onClick={() => setEditingDetails(false)}
+              />
+            </div>
+          </form>
+        </div>
+      ) : null}
 
       {pendingAdd ? (
         <div className="add-note-overlay" onClick={() => setPendingAdd(null)}>
@@ -274,7 +360,12 @@ export default function WaiterView() {
   function handleOpened(order) {
     setPendingTable(null);
     refetch();
-    setActiveTable({ ...pendingTable, open_order_id: order.id, client_name: order.client_name });
+    setActiveTable({
+      ...pendingTable,
+      open_order_id: order.id,
+      client_name: order.client_name,
+      persons_count: order.persons_count,
+    });
   }
 
   function handleBack() {

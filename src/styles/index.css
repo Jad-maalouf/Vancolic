@@ -308,6 +308,7 @@ button {
 .table-card-client {
   margin-top: 6px;
   font-size: 0.85rem;
+  overflow-wrap: anywhere;
 }
 .table-card-total {
   font-weight: bold;
@@ -339,6 +340,13 @@ button {
   max-width: 900px;
   margin: 0 auto;
   padding: 0 16px;
+}
+.order-builder-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 .order-builder section {
   margin-bottom: 24px;

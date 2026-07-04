@@ -50,6 +50,7 @@ export const api = {
   getOrderItems: (orderId) => request(`/orders/${orderId}/items`),
   addOrderItem: (orderId, payload) => request(`/orders/${orderId}/items`, { method: 'POST', body: payload }),
   getOpenOrders: () => request('/orders'),
+  updateOrderDetails: (id, payload) => request(`/orders/${id}/details`, { method: 'PATCH', body: payload }),
   closeOrder: (id, status) => request(`/orders/${id}/close`, { method: 'PATCH', body: { status } }),
   getClosedOrders: (startDate, endDate) =>
     request(`/orders/closed?startDate=${startDate}&endDate=${endDate}`),

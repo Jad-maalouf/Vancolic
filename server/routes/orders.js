@@ -1,7 +1,7 @@
 const express = require('express');
 const { authenticate, requireRole } = require('../middleware/auth.js');
 const { asyncHandler } = require('../lib/asyncHandler.js');
-const { findOrderById, listOpenOrders, closeOrder, listClosedOrders } = require('../db/queries/orders.js');
+const { findOrderById, updateOrderDetails, listOpenOrders, closeOrder, listClosedOrders } = require('../db/queries/orders.js');
 const { listItemsForOrder, addOrderItem } = require('../db/queries/orderItems.js');
 const { findMenuItemById } = require('../db/queries/menuItems.js');
 
@@ -70,6 +70,29 @@ router.post('/:id/items', authenticate, requireRole('waiter', 'manager'), asyncH
     mixerLabel: withMixer ? menuItem.mixer_label : null,
   });
   return res.status(201).json({ item });
+}));
+
+// Waiter (or manager) fixes the client name / persons count on an open tab.
+router.patch('/:id/details', authenticate, requireRole('waiter', 'manager'), asyncHandler(async (req, res) => {
+  const { clientName, personsCount } = req.body || {};
+  if (clientName != null && typeof clientName !== 'string') {
+    return res.status(400).json({ error: 'clientName must be a string' });
+  }
+  let persons = null;
+  if (personsCount != null && personsCount !== '') {
+    persons = Number(personsCount);
+    if (!Number.isInteger(persons) || persons <= 0) {
+      return res.status(400).json({ error: 'personsCount must be a positive whole number' });
+    }
+  }
+  const order = await updateOrderDetails(req.params.id, {
+    clientName: clientName ? clientName.trim().slice(0, 80) || null : null,
+    personsCount: persons,
+  });
+  if (!order) {
+    return res.status(404).json({ error: 'Open order not found' });
+  }
+  return res.json({ order });
 }));
 
 // Manager marks a table's tab paid (or cancelled) and closes it out.

@@ -15,6 +15,17 @@ async function findOrderById(id) {
   return rows[0] || null;
 }
 
+// Waiter corrections while the tab is open: who the table is for and how many.
+async function updateOrderDetails(id, { clientName, personsCount }) {
+  const { rows } = await query(
+    `update orders set client_name = $2, persons_count = $3
+     where id = $1 and status = 'open'
+     returning *`,
+    [id, clientName ?? null, personsCount ?? null]
+  );
+  return rows[0] || null;
+}
+
 async function listOpenOrders() {
   const { rows } = await query(
     `select o.*, rt.label as table_label
@@ -51,4 +62,4 @@ async function listClosedOrders({ startDate, endDate } = {}) {
   return rows;
 }
 
-module.exports = { openOrder, findOrderById, listOpenOrders, closeOrder, listClosedOrders };
+module.exports = { openOrder, findOrderById, updateOrderDetails, listOpenOrders, closeOrder, listClosedOrders };
