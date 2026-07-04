@@ -6,6 +6,7 @@ import { RefreshIcon, DoubleCheckIcon, PlayIcon, CheckIcon } from '../components
 import { useActiveOrderItems } from '../hooks/useOrderItems.js';
 import { api } from '../api/apiClient.js';
 import { groupIdenticalItems } from '../lib/pricing.js';
+import { RecipesTab } from './bartender/RecipesTab.jsx';
 
 const NEXT_STATUS = { pending: 'preparing', preparing: 'served' };
 const NEXT_LABEL = { pending: 'Preparing', preparing: 'Serving' };
@@ -26,6 +27,33 @@ function groupByTable(items) {
 }
 
 export default function BartenderBoard() {
+  const [activeTab, setActiveTab] = useState('orders');
+
+  return (
+    <div className="page bartender-board">
+      <TopNav />
+      <div className="manager-tab-bar">
+        <button
+          type="button"
+          className={activeTab === 'orders' ? 'selected' : ''}
+          onClick={() => setActiveTab('orders')}
+        >
+          Orders
+        </button>
+        <button
+          type="button"
+          className={activeTab === 'recipes' ? 'selected' : ''}
+          onClick={() => setActiveTab('recipes')}
+        >
+          Recipes
+        </button>
+      </div>
+      {activeTab === 'orders' ? <OrdersTab /> : <RecipesTab />}
+    </div>
+  );
+}
+
+function OrdersTab() {
   const { items, loading, error, refetch } = useActiveOrderItems();
   const [updatingId, setUpdatingId] = useState(null);
   const [bulkUpdating, setBulkUpdating] = useState(false);
@@ -63,8 +91,7 @@ export default function BartenderBoard() {
   }
 
   return (
-    <div className="page bartender-board">
-      <TopNav />
+    <div className="bartender-orders">
       <div className="page-header">
         <h1>Incoming orders</h1>
         <div className="icon-button-group">

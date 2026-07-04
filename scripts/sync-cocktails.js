@@ -1,0 +1,98 @@
+// Syncs the cocktails / shots / Vancolic specialties sections with the recipe
+// document (Cocktails.docx): fixes ingredient descriptions on existing items
+// and inserts the items that are missing. Prices and active flags of existing
+// rows are left untouched (the manager controls those in the app).
+// Run with: node scripts/sync-cocktails.js
+//
+// Safe to re-run — updates only apply when the description differs, and
+// inserts are skipped when an item with the same name already exists in the
+// category (regardless of subcategory, so e.g. "Whiskey sour" living under the
+// manager-created "Sours" subcategory is not duplicated).
+require('dotenv/config');
+const { pool, query } = require('../server/db.js');
+
+// ingredient corrections for items that already exist (matched by name within
+// the category, case-insensitively)
+const UPDATES = [
+  ['cocktails', 'Passion Fruit Martini', 'Vodka, passion fruit purée, sugar syrup, lime juice'],
+  ['cocktails', 'Mojito', 'Rum, mint, lime juice, sugar, sparkling water'],
+  ['cocktails', 'Gin Basil Smash', 'Gin, basil, sugar syrup, lime juice'],
+  ['cocktails', 'Old Fashioned', 'Bourbon whiskey, sugar, orange bitters, aromatic bitters, orange zest'],
+  ['cocktails', 'Long Island', 'Vodka, tequila, rum, gin, triple sec, lime juice, pepsi'],
+  ['cocktails', 'Godfather', 'Whiskey, amaretto, rosemary'],
+  ['cocktails', 'Negroni', 'Gin, campari, sweet vermouth, lemon zest'],
+  // aqua faba is deliberately left out of customer-facing descriptions; it
+  // only appears in the bartender recipes (src/data/recipes.js)
+  ['cocktails', 'Whiskey Sour', 'Bourbon whiskey, lime juice, sugar syrup, aromatic bitters'],
+  ['cocktails', 'Amaretto Sour', 'Amaretto, sugar syrup, lime juice, aromatic bitters'],
+  ['cocktails', 'Gin Sour', 'Gin, sugar syrup, lime juice, aromatic bitters'],
+  ['shots', 'Brain Damage', 'Peach schnapps, irish cream, grenadine'],
+];
+
+// items from the document that may be missing: [category, subcategory, name, glassPrice, active, description]
+const INSERTS = [
+  ['cocktails', 'International Cocktails', 'Blue Ice Tea', 6, true, 'Vodka, blue curacao, apple juice, XXL energy drink'],
+  ['cocktails', 'International Cocktails', 'Jamaica', 5, true, 'Vodka, orange juice, pineapple juice, grenadine'],
+  ['shots', 'Shots', 'Alien Brain Damage', 3, true, 'Peach schnapps, irish cream, grenadine, blue curacao'],
+  ['shots', 'Shots', 'Frog Shot', 3, true, 'Midori, irish cream, blue curacao, grenadine'],
+  ['shots', 'Shots', '4th of July', 3, true, 'Grenadine, peach schnapps, blue curacao, vodka'],
+  ['shots', 'Shots', 'Liquid Cocaine', 4, true, 'Jagermeister, goldschlager'],
+  ['shots', 'Shots', 'Hiroshima', 3, true, 'Sambuca, irish cream, midori'],
+  ['shots', 'Shots', 'Doudou', 3, true, 'Vodka, lime juice, salt, tabasco, olive'],
+  // complimentary "dyafe" (hospitality) shots — inactive until the manager enables them
+  ['shots', 'Shots', 'Shot Dyafe (Blue)', 3, false, 'Vodka, pineapple juice, blue curacao'],
+  ['shots', 'Shots', 'Shot Dyafe (Grenadine)', 3, false, 'Vodka, pineapple juice, grenadine'],
+  ['vancolic_specialities', 'Vancolic Special Cocktails', 'Pink Blue', 5, true, 'Pink gin, sugar syrup, lime juice, grenadine, strawberry, aromatic bitters'],
+  ['vancolic_specialities', 'Vancolic Special Cocktails', 'Blues', 5, true, 'Gin, passion fruit, lime juice, sugar syrup, pineapple juice, blue curacao'],
+  ['vancolic_specialities', 'Vancolic Special Cocktails', 'Boulevardier', 5, true, 'Bourbon whiskey, campari, sweet vermouth, orange bitters, aromatic bitters, orange zest'],
+  ['vancolic_specialities', 'Vancolic Special Cocktails', 'Italian Smoker', 5, true, 'Amaretto, bourbon whiskey, jagermeister, orange bitters, aromatic bitters'],
+];
+
+async function main() {
+  for (const [category, name, description] of UPDATES) {
+    const { rows } = await query(
+      `update menu_items
+          set description = $1
+        where category = $2 and lower(name) = lower($3)
+          and description is distinct from $1
+        returning subcategory, name`,
+      [description, category, name]
+    );
+    for (const row of rows) {
+      console.log(`updated  ${category}/${row.subcategory}: ${row.name}`);
+    }
+  }
+
+  for (const [category, subcategory, name, glassPrice, active, description] of INSERTS) {
+    const { rows: existing } = await query(
+      'select 1 from menu_items where category = $1 and lower(name) = lower($2)',
+      [category, name]
+    );
+    if (existing.length > 0) {
+      // already present — still keep its description in sync with the document
+      const { rowCount } = await query(
+        `update menu_items
+            set description = $1
+          where category = $2 and lower(name) = lower($3)
+            and description is distinct from $1`,
+        [description, category, name]
+      );
+      console.log(`exists   ${category}: ${name} — ${rowCount > 0 ? 'description updated' : 'skipped'}`);
+      continue;
+    }
+    await query(
+      `insert into menu_items (category, subcategory, name, description, glass_price, active, sort_order)
+       values ($1, $2, $3, $4, $5, $6,
+               (select coalesce(max(sort_order), -1) + 1 from menu_items where category = $1 and subcategory = $2))`,
+      [category, subcategory, name, description, glassPrice, active]
+    );
+    console.log(`inserted ${category}/${subcategory}: ${name}`);
+  }
+
+  await pool.end();
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

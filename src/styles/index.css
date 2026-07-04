@@ -605,6 +605,88 @@ button {
   justify-content: center;
 }
 
+/* ---- bartender recipes ---- */
+
+.recipes-tab {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 16px 40px;
+}
+.recipes-search {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.recipes-search input {
+  width: 100%;
+  max-width: 420px;
+  padding: 10px 14px;
+  border-radius: 20px;
+}
+.recipes-empty {
+  text-align: center;
+  opacity: 0.75;
+}
+.recipes-section h2 {
+  text-align: center;
+  font-size: 1.05rem;
+  margin: 20px 0 10px;
+}
+.recipe-cards {
+  display: grid;
+  /* min(280px, 100%) keeps cards from forcing horizontal scroll on narrow phones */
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.recipe-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+.recipe-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px 8px;
+  padding: 10px 14px;
+  background: #0d5b72;
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+.recipe-card-name {
+  overflow-wrap: anywhere;
+}
+.recipe-card-method {
+  font-size: 0.72rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.recipe-card-ingredients {
+  margin: 0;
+  padding: 10px 14px 10px 32px;
+}
+.recipe-card-ingredients li {
+  padding: 2px 0;
+}
+.recipe-card-notes {
+  margin: 0 12px 12px;
+  padding: 4px 8px;
+  background: #fff8e0;
+  border-left: 3px solid #ffcc33;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  font-style: italic;
+}
+
 /* ---- mobile ---- */
 
 @media only screen and (max-width: 600px) {
@@ -664,5 +746,18 @@ button {
   .new-menu-item-form,
   .new-staff-form {
     padding: 16px;
+  }
+  .recipes-tab {
+    padding: 0 8px 32px;
+  }
+  .recipe-cards {
+    gap: 8px;
+  }
+  .recipes-section h2 {
+    margin: 14px 0 8px;
+  }
+  .recipe-card-header,
+  .recipe-card-ingredients {
+    font-size: 0.9rem;
   }
 }
