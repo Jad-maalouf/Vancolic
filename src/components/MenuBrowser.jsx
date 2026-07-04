@@ -71,7 +71,7 @@ export function MenuBrowser({ items, renderActions, defaultCategoryId }) {
               </TableScroll>
               {mixer ? (
                 <p className="mixer-note">
-                  * Add {mixer.mixer_label} to {mixerTarget} for +{formatPrice(mixer.mixer_price)}
+                  * Add {mixer.mixer_label} to {mixerTarget} +{formatPrice(mixer.mixer_price)}
                 </p>
               ) : null}
             </div>

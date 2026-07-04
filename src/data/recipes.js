@@ -172,6 +172,15 @@ export const RECIPE_SECTIONS = [
           'Drops of aromatic bitters',
         ],
       },
+      {
+        name: 'Midori Sour',
+        method: 'Shaker',
+        ingredients: ['Midori', 'Sugar syrup', 'Lime juice'],
+      },
+      {
+        name: 'Jager Bomb',
+        ingredients: ['Jagermeister', 'Red Bull (energy drink)'],
+      },
     ],
   },
   {
@@ -208,6 +217,10 @@ export const RECIPE_SECTIONS = [
         name: 'Hiroshima',
         method: 'Layered',
         ingredients: ['White sambuca', 'Baileys', 'Midori'],
+      },
+      {
+        name: 'Drunk Melon',
+        ingredients: ['Sambuca', 'Midori', 'Gin', 'Lime'],
       },
       {
         name: 'Doudou',

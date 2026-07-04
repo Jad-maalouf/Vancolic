@@ -26,26 +26,25 @@ const UPDATES = [
   ['cocktails', 'Whiskey Sour', 'Bourbon whiskey, lime juice, sugar syrup, aromatic bitters'],
   ['cocktails', 'Amaretto Sour', 'Amaretto, sugar syrup, lime juice, aromatic bitters'],
   ['cocktails', 'Gin Sour', 'Gin, sugar syrup, lime juice, aromatic bitters'],
-  ['shots', 'Brain Damage', 'Peach schnapps, irish cream, grenadine'],
 ];
 
 // items from the document that may be missing: [category, subcategory, name, glassPrice, active, description]
 const INSERTS = [
   ['cocktails', 'International Cocktails', 'Blue Ice Tea', 6, true, 'Vodka, blue curacao, apple juice, XXL energy drink'],
   ['cocktails', 'International Cocktails', 'Jamaica', 5, true, 'Vodka, orange juice, pineapple juice, grenadine'],
-  ['shots', 'Shots', 'Alien Brain Damage', 3, true, 'Peach schnapps, irish cream, grenadine, blue curacao'],
-  ['shots', 'Shots', 'Frog Shot', 3, true, 'Midori, irish cream, blue curacao, grenadine'],
-  ['shots', 'Shots', '4th of July', 3, true, 'Grenadine, peach schnapps, blue curacao, vodka'],
-  ['shots', 'Shots', 'Liquid Cocaine', 4, true, 'Jagermeister, goldschlager'],
-  ['shots', 'Shots', 'Hiroshima', 3, true, 'Sambuca, irish cream, midori'],
-  ['shots', 'Shots', 'Doudou', 3, true, 'Vodka, lime juice, salt, tabasco, olive'],
-  // complimentary "dyafe" (hospitality) shots — inactive until the manager enables them
-  ['shots', 'Shots', 'Shot Dyafe (Blue)', 3, false, 'Vodka, pineapple juice, blue curacao'],
-  ['shots', 'Shots', 'Shot Dyafe (Grenadine)', 3, false, 'Vodka, pineapple juice, grenadine'],
-  ['vancolic_specialities', 'Vancolic Special Cocktails', 'Pink Blue', 5, true, 'Pink gin, sugar syrup, lime juice, grenadine, strawberry, aromatic bitters'],
+  // shots carry no public description — their recipes are bartender-only (src/data/recipes.js)
+  ['shots', 'Shots', 'Alien Brain Damage', 3, true, null],
+  ['shots', 'Shots', 'Frog Shot', 3, true, null],
+  ['shots', 'Shots', '4th of July', 3, true, null],
+  ['shots', 'Shots', 'Liquid Cocaine', 4, true, null],
+  ['shots', 'Shots', 'Hiroshima', 3, true, null],
+  ['shots', 'Shots', 'Doudou', 3, true, null],
+  // public descriptions are simplified on purpose (no brand names, bitters, or
+  // garnish) — the full builds are bartender-only in src/data/recipes.js
+  ['vancolic_specialities', 'Vancolic Special Cocktails', 'Pink Blue', 5, true, 'Gin, simple syrup, lime juice, grenadine, strawberry'],
   ['vancolic_specialities', 'Vancolic Special Cocktails', 'Blues', 5, true, 'Gin, passion fruit, lime juice, sugar syrup, pineapple juice, blue curacao'],
-  ['vancolic_specialities', 'Vancolic Special Cocktails', 'Boulevardier', 5, true, 'Bourbon whiskey, campari, sweet vermouth, orange bitters, aromatic bitters, orange zest'],
-  ['vancolic_specialities', 'Vancolic Special Cocktails', 'Italian Smoker', 5, true, 'Amaretto, bourbon whiskey, jagermeister, orange bitters, aromatic bitters'],
+  ['vancolic_specialities', 'Vancolic Special Cocktails', 'Boulevardier', 5, true, 'Bourbon whiskey, campari, sweet vermouth'],
+  ['vancolic_specialities', 'Vancolic Special Cocktails', 'Italian Smoker', 5, true, 'Amaretto, bourbon whiskey, jagermeister'],
 ];
 
 async function main() {
@@ -61,6 +60,30 @@ async function main() {
     for (const row of rows) {
       console.log(`updated  ${category}/${row.subcategory}: ${row.name}`);
     }
+  }
+
+  // the "dyafe" hospitality shots are bartender-only knowledge, not menu items;
+  // remove them if a previous sync created them (guarded so an item that was
+  // ever ordered is never deleted)
+  const { rows: removed } = await query(
+    `delete from menu_items m
+      where m.category = 'shots'
+        and m.name in ('Shot Dyafe (Blue)', 'Shot Dyafe (Grenadine)')
+        and not exists (select 1 from order_items oi where oi.menu_item_id = m.id)
+      returning m.name`
+  );
+  for (const row of removed) {
+    console.log(`removed  shots: ${row.name}`);
+  }
+
+  // shot recipes are bartender-only: blank out any public description on shots
+  const { rows: cleared } = await query(
+    `update menu_items set description = null
+      where category = 'shots' and description is not null
+      returning name`
+  );
+  for (const row of cleared) {
+    console.log(`cleared  shots: ${row.name} — description removed`);
   }
 
   for (const [category, subcategory, name, glassPrice, active, description] of INSERTS) {

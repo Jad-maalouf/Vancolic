@@ -159,10 +159,10 @@ const MENU = [
       ['V8', 5, null, false, 'Rose Wine, Fresh Fruits (apple, orange, grapes, strawberry, passion, peach) and soda water if ordered'],
       ['V9', 5, null, false, 'Whiskey, Coffee Liqueur, Irish Cream'],
       ['V10', 5, null, false, 'Vodka, Amaretto, Pineapple Juice, Grenadine, Cherry'],
-      ['Pink Blue', 5, null, true, 'Pink gin, sugar syrup, lime juice, grenadine, strawberry, aromatic bitters'],
+      ['Pink Blue', 5, null, true, 'Gin, simple syrup, lime juice, grenadine, strawberry'],
       ['Blues', 5, null, true, 'Gin, passion fruit, lime juice, sugar syrup, pineapple juice, blue curacao'],
-      ['Boulevardier', 5, null, true, 'Bourbon whiskey, campari, sweet vermouth, orange bitters, aromatic bitters, orange zest'],
-      ['Italian Smoker', 5, null, true, 'Amaretto, bourbon whiskey, jagermeister, orange bitters, aromatic bitters'],
+      ['Boulevardier', 5, null, true, 'Bourbon whiskey, campari, sweet vermouth'],
+      ['Italian Smoker', 5, null, true, 'Amaretto, bourbon whiskey, jagermeister'],
     ],
   },
   {
@@ -170,22 +170,22 @@ const MENU = [
     subcategory: 'Shots',
     singlePrice: true,
     items: [
-      ['Brain Damage', 3, null, true, 'Peach schnapps, irish cream, grenadine'],
-      ['Alien Brain Damage', 3, null, true, 'Peach schnapps, irish cream, grenadine, blue curacao'],
-      ['B52', 3, null, true, 'Irish cream, grand marnier, coffee liqueur'],
-      ['Frog Shot', 3, null, true, 'Midori, irish cream, blue curacao, grenadine'],
-      ['4th of July', 3, null, true, 'Grenadine, peach schnapps, blue curacao, vodka'],
-      ['Liquid Cocaine', 4, null, true, 'Jagermeister, goldschlager'],
-      ['Hiroshima', 3, null, true, 'Sambuca, irish cream, midori'],
-      ['Doudou', 3, null, true, 'Vodka, lime juice, salt, tabasco, olive'],
-      ['Drunk Melon', 3, null, true, 'Sambuca, midori, gin, lime'],
+      // shot recipes are deliberately not shown on the public menu — the
+      // ingredients live in the bartender recipes (src/data/recipes.js)
+      ['Brain Damage', 3, null, true],
+      ['Alien Brain Damage', 3, null, true],
+      ['B52', 3, null, true],
+      ['Frog Shot', 3, null, true],
+      ['4th of July', 3, null, true],
+      ['Liquid Cocaine', 4, null, true],
+      ['Hiroshima', 3, null, true],
+      ['Doudou', 3, null, true],
+      ['Drunk Melon', 3, null, true],
       ['Tequila', 3, null, true],
       ['Jagermeister', 3, null, true],
       ['Goldschlager', 4, null, true],
-      // complimentary "dyafe" (hospitality) shots — kept inactive so they don't
-      // show on the customer menu unless the manager enables them
-      ['Shot Dyafe (Blue)', 3, null, false, 'Vodka, pineapple juice, blue curacao'],
-      ['Shot Dyafe (Grenadine)', 3, null, false, 'Vodka, pineapple juice, grenadine'],
+      // the complimentary "dyafe" (hospitality) shots are intentionally not menu
+      // items — they exist only in the bartender recipes (src/data/recipes.js)
     ],
   },
   {
