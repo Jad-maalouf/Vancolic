@@ -5,7 +5,7 @@ import { formatPrice, formatPriceValue, groupMenuItems } from '../lib/pricing.js
 
 // Shared by the public menu (read-only) and the waiter's order builder
 // (renderActions adds "add to order" controls per row).
-export function MenuBrowser({ items, renderActions, defaultCategoryId }) {
+export function MenuBrowser({ items, renderActions, defaultCategoryId, showPrices = true }) {
   const grouped = groupMenuItems(items).filter((c) =>
     c.subcategories.some((s) => s.items.length > 0)
   );
@@ -32,14 +32,16 @@ export function MenuBrowser({ items, renderActions, defaultCategoryId }) {
                   <tbody>
                     <tr>
                       <th className="item">Item</th>
-                      {hasBottle ? (
-                        <>
-                          <th className="price">Bottle ($)</th>
-                          <th className="price">Glass ($)</th>
-                        </>
-                      ) : (
-                        <th className="price">Price ($)</th>
-                      )}
+                      {showPrices ? (
+                        hasBottle ? (
+                          <>
+                            <th className="price">Bottle ($)</th>
+                            <th className="price">Glass ($)</th>
+                          </>
+                        ) : (
+                          <th className="price">Price ($)</th>
+                        )
+                      ) : null}
                       {renderActions ? <th className="price">Add</th> : null}
                     </tr>
                     {sub.items.map((item) => (
@@ -54,18 +56,21 @@ export function MenuBrowser({ items, renderActions, defaultCategoryId }) {
                           ) : null}
                           {!sharedMixer && item.mixer_price != null ? (
                             <div className="mixer-note-inline">
-                              * Add {item.mixer_label} +{formatPrice(item.mixer_price)}
+                              * Add {item.mixer_label}
+                              {showPrices ? ` +${formatPrice(item.mixer_price)}` : ''}
                             </div>
                           ) : null}
                         </td>
-                        {hasBottle ? (
-                          <>
-                            <td className="price">{formatPriceValue(item.bottle_price)}</td>
+                        {showPrices ? (
+                          hasBottle ? (
+                            <>
+                              <td className="price">{formatPriceValue(item.bottle_price)}</td>
+                              <td className="price">{formatPriceValue(item.glass_price)}</td>
+                            </>
+                          ) : (
                             <td className="price">{formatPriceValue(item.glass_price)}</td>
-                          </>
-                        ) : (
-                          <td className="price">{formatPriceValue(item.glass_price)}</td>
-                        )}
+                          )
+                        ) : null}
                         {renderActions ? <td className="price">{renderActions(item)}</td> : null}
                       </tr>
                     ))}
@@ -74,7 +79,8 @@ export function MenuBrowser({ items, renderActions, defaultCategoryId }) {
               </TableScroll>
               {sharedMixer ? (
                 <p className="mixer-note">
-                  * Add {sharedMixer.mixer_label} to any glass +{formatPrice(sharedMixer.mixer_price)}
+                  * Add {sharedMixer.mixer_label} to any glass
+                  {showPrices ? ` +${formatPrice(sharedMixer.mixer_price)}` : ''}
                 </p>
               ) : null}
             </div>

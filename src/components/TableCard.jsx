@@ -1,6 +1,6 @@
 import { formatPrice } from '../lib/pricing.js';
 
-export function TableCard({ table, onSelect }) {
+export function TableCard({ table, onSelect, showTotal = true }) {
   const isOpen = Boolean(table.open_order_id);
   const inProgress = (table.pending_count ?? 0) + (table.preparing_count ?? 0);
 
@@ -17,7 +17,7 @@ export function TableCard({ table, onSelect }) {
             {table.client_name || 'No name'}
             {table.persons_count ? ` · ${table.persons_count} persons` : ''}
           </div>
-          <div className="table-card-total">{formatPrice(table.running_total)}</div>
+          {showTotal ? <div className="table-card-total">{formatPrice(table.running_total)}</div> : null}
           {inProgress > 0 ? <div className="table-card-pending">{inProgress} in progress</div> : null}
         </>
       ) : (

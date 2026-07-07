@@ -5,7 +5,7 @@ import { TrashIcon } from './icons.jsx';
 
 const TWO_PRICE_CATEGORIES = new Set(['spirits', 'wine_bubbles']);
 
-export function OrderItemRow({ item, onRemove, removing }) {
+export function OrderItemRow({ item, onRemove, removing, showPrice = true }) {
   const showPriceType = TWO_PRICE_CATEGORIES.has(item.category);
   return (
     <tr>
@@ -21,7 +21,7 @@ export function OrderItemRow({ item, onRemove, removing }) {
         ) : null}
       </td>
       <td className="price">{item.quantity}</td>
-      <td className="price">{formatPrice(item.unit_price * item.quantity)}</td>
+      {showPrice ? <td className="price">{formatPrice(item.unit_price * item.quantity)}</td> : null}
       <td className="price">
         <StatusBadge status={item.status} />
       </td>

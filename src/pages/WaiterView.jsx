@@ -10,6 +10,7 @@ import { useTables } from '../hooks/useTables.js';
 import { useMenuItems } from '../hooks/useMenuItems.js';
 import { useOrderItems } from '../hooks/useOrderItems.js';
 import { api } from '../api/apiClient.js';
+import { useAuth } from '../auth/AuthContext.jsx';
 import { computeOrderTotal, formatPrice, groupIdenticalItems } from '../lib/pricing.js';
 
 function OpenTableForm({ table, onCancel, onOpened }) {
@@ -74,7 +75,7 @@ function OpenTableForm({ table, onCancel, onOpened }) {
   );
 }
 
-function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
+function OrderBuilder({ table, orderId, onBack, onTablesChanged, showPrices }) {
   const { items: orderItems, loading: itemsLoading, refetch: refetchItems } = useOrderItems(orderId);
   const { items: menuItems, loading: menuLoading } = useMenuItems();
   const [addingId, setAddingId] = useState(null);
@@ -181,7 +182,7 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
       </h2>
 
       <section>
-        <h3>Current order — {formatPrice(total)}</h3>
+        <h3>{showPrices ? `Current order — ${formatPrice(total)}` : 'Current order'}</h3>
         {itemsLoading ? (
           <p>Loading order…</p>
         ) : visibleItems.length === 0 ? (
@@ -193,7 +194,7 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
                 <tr>
                   <th className="item">Item</th>
                   <th className="price">Qty</th>
-                  <th className="price">Total</th>
+                  {showPrices ? <th className="price">Total</th> : null}
                   <th className="price">Status</th>
                   <th className="price">Remove</th>
                 </tr>
@@ -203,6 +204,7 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
                     item={item}
                     onRemove={removeItem}
                     removing={removingId === item.id}
+                    showPrice={showPrices}
                   />
                 ))}
               </tbody>
@@ -219,6 +221,7 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
         ) : (
           <MenuBrowser
             items={menuItems}
+            showPrices={showPrices}
             renderActions={(item) => (
               <div className="add-actions">
                 {item.bottle_price != null ? (
@@ -309,7 +312,8 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
                   checked={mixerDraft}
                   onChange={(e) => setMixerDraft(e.target.checked)}
                 />
-                with {pendingAdd.menuItem.mixer_label} (+{formatPrice(pendingAdd.menuItem.mixer_price)})
+                with {pendingAdd.menuItem.mixer_label}
+                {showPrices ? ` (+${formatPrice(pendingAdd.menuItem.mixer_price)})` : ''}
               </label>
             ) : null}
             <label>
@@ -345,6 +349,9 @@ function OrderBuilder({ table, orderId, onBack, onTablesChanged }) {
 }
 
 export default function WaiterView() {
+  const { user } = useAuth();
+  // waiters manage tables and items but never see prices or totals
+  const showPrices = user?.role !== 'waiter';
   const { tables, loading, error, refetch } = useTables();
   const [pendingTable, setPendingTable] = useState(null);
   const [activeTable, setActiveTable] = useState(null);
@@ -384,6 +391,7 @@ export default function WaiterView() {
           orderId={activeTable.open_order_id}
           onBack={handleBack}
           onTablesChanged={refetch}
+          showPrices={showPrices}
         />
       ) : pendingTable ? (
         <OpenTableForm
@@ -397,7 +405,7 @@ export default function WaiterView() {
           {error ? <p className="error">{error}</p> : null}
           <div className="table-grid">
             {tables.map((table) => (
-              <TableCard key={table.table_id} table={table} onSelect={handleSelect} />
+              <TableCard key={table.table_id} table={table} onSelect={handleSelect} showTotal={showPrices} />
             ))}
           </div>
         </>
