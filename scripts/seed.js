@@ -203,6 +203,9 @@ const MENU = [
     category: 'beer',
     subcategory: 'Beer',
     singlePrice: true,
+    // Mexican add-on applies to the whole section, so one generic note renders
+    // under the table instead of repeating under each beer.
+    mixer: ['Mexican', 1],
     items: [
       ['Almaza', 3],
       ['Almaza Light', 3],
@@ -210,7 +213,7 @@ const MENU = [
       ['Almaza Dark', 4],
       ['Almaza Unfiltered', 4],
       ['Corona', 5],
-      ['Add Mexican', 1],
+      ['Heineken', 5],
     ],
   },
   {
