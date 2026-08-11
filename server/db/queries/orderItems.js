@@ -22,7 +22,7 @@ async function listItemsForOrder(orderId) {
   return rows;
 }
 
-// Bartender board: every pending/preparing item across all open orders/tables.
+// Bartender board: every pending item across all open orders/tables.
 async function listActiveOrderItems() {
   const { rows } = await query(
     `select oi.*, mi.name as item_name, mi.category, mi.subcategory,
@@ -31,7 +31,7 @@ async function listActiveOrderItems() {
      join menu_items mi on mi.id = oi.menu_item_id
      join orders o on o.id = oi.order_id
      join restaurant_tables rt on rt.id = o.table_id
-     where oi.status in ('pending', 'preparing')
+     where oi.status = 'pending'
        and o.status = 'open'
      order by oi.created_at`
   );

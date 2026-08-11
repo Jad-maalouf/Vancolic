@@ -5,7 +5,7 @@ async function listTableOverview() {
   // "Table 10"), alphabetically otherwise — plain `order by label` is lexicographic
   const { rows } = await query(
     `select table_id, label, active, open_order_id, client_name, opened_by,
-            running_total, pending_count, preparing_count, persons_count
+            running_total, pending_count, persons_count
      from table_overview
      where active
      order by (nullif(regexp_replace(label, '\\D', '', 'g'), ''))::int nulls last, label`

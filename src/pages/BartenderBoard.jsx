@@ -5,17 +5,12 @@ import { IconButton } from "../components/IconButton.jsx";
 import {
   RefreshIcon,
   DoubleCheckIcon,
-  PlayIcon,
   CheckIcon,
 } from "../components/icons.jsx";
 import { useActiveOrderItems } from "../hooks/useOrderItems.js";
 import { api } from "../api/apiClient.js";
 import { groupIdenticalItems } from "../lib/pricing.js";
 import { RecipesTab } from "./bartender/RecipesTab.jsx";
-
-const NEXT_STATUS = { pending: "preparing", preparing: "served" };
-const NEXT_LABEL = { pending: "Preparing", preparing: "Serving" };
-const NEXT_ICON = { pending: PlayIcon, preparing: CheckIcon };
 
 // Group active items by table, keeping the overall created_at order:
 // groups appear in the order their first item came in, items keep order within.
@@ -67,18 +62,16 @@ export default function BartenderBoard() {
 function OrdersTab() {
   const { items, loading, error, refetch } = useActiveOrderItems();
   const [updatingId, setUpdatingId] = useState(null);
-  const [bulkUpdating, setBulkUpdating] = useState(false);
+  const [servingTableKey, setServingTableKey] = useState(null);
   const [actionError, setActionError] = useState(null);
 
-  // `line` may be several identical rows merged together — advance all of them.
-  async function advance(line) {
-    const next = NEXT_STATUS[line.status];
-    if (!next) return;
+  // `line` may be several identical rows merged together — serve all of them.
+  async function serveLine(line) {
     setUpdatingId(line.id);
     setActionError(null);
     try {
       await Promise.all(
-        line.ids.map((id) => api.updateOrderItemStatus(id, next)),
+        line.ids.map((id) => api.updateOrderItemStatus(id, "served")),
       );
       await refetch();
     } catch (err) {
@@ -88,21 +81,26 @@ function OrdersTab() {
     }
   }
 
-  async function markAllServed() {
-    if (items.length === 0) return;
-    if (!window.confirm(`Mark all ${items.length} item(s) below as served?`))
+  // Serve every remaining item of a single table at once.
+  async function serveTable(group) {
+    if (group.items.length === 0) return;
+    if (
+      !window.confirm(
+        `Mark all ${group.items.length} item(s) of ${group.table_label} as served?`,
+      )
+    )
       return;
-    setBulkUpdating(true);
+    setServingTableKey(group.key);
     setActionError(null);
     try {
       await Promise.all(
-        items.map((item) => api.updateOrderItemStatus(item.id, "served")),
+        group.items.map((item) => api.updateOrderItemStatus(item.id, "served")),
       );
       await refetch();
     } catch (err) {
       setActionError(err.message);
     } finally {
-      setBulkUpdating(false);
+      setServingTableKey(null);
     }
   }
 
@@ -116,13 +114,6 @@ function OrdersTab() {
             label="Refresh"
             className="icon-button-outline"
             onClick={refetch}
-          />
-          <IconButton
-            icon={DoubleCheckIcon}
-            label={bulkUpdating ? "Marking…" : "Mark all served"}
-            className="icon-button-success"
-            disabled={bulkUpdating || items.length === 0}
-            onClick={markAllServed}
           />
         </div>
       </div>
@@ -139,8 +130,21 @@ function OrdersTab() {
         {groupByTable(items).map((group) => (
           <div key={group.key} className="table-order-group">
             <div className="table-order-group-header">
-              {group.table_label}
-              {group.client_name ? ` — ${group.client_name}` : ""}
+              <span>
+                {group.table_label}
+                {group.client_name ? ` — ${group.client_name}` : ""}
+              </span>
+              <IconButton
+                icon={DoubleCheckIcon}
+                label={
+                  servingTableKey === group.key
+                    ? "Marking…"
+                    : "Serve whole table"
+                }
+                className="icon-button-success icon-button-sm"
+                disabled={servingTableKey === group.key}
+                onClick={() => serveTable(group)}
+              />
             </div>
             <table className="table-order-items">
               <tbody>
@@ -163,19 +167,15 @@ function OrdersTab() {
                       <StatusBadge status={item.status} />
                     </td>
                     <td className="table-order-item-action">
-                      {NEXT_STATUS[item.status] ? (
-                        <IconButton
-                          icon={NEXT_ICON[item.status]}
-                          label={
-                            updatingId === item.id
-                              ? "Updating…"
-                              : NEXT_LABEL[item.status]
-                          }
-                          className="icon-button-neutral"
-                          disabled={updatingId === item.id}
-                          onClick={() => advance(item)}
-                        />
-                      ) : null}
+                      <IconButton
+                        icon={CheckIcon}
+                        label={
+                          updatingId === item.id ? "Serving…" : "Serve"
+                        }
+                        className="icon-button-neutral"
+                        disabled={updatingId === item.id}
+                        onClick={() => serveLine(item)}
+                      />
                     </td>
                   </tr>
                 ))}

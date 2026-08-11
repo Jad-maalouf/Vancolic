@@ -7,7 +7,7 @@ create extension if not exists pgcrypto;
 
 create type user_role as enum ('manager', 'bartender', 'waiter');
 create type order_status as enum ('open', 'paid', 'cancelled');
-create type order_item_status as enum ('pending', 'preparing', 'served', 'cancelled');
+create type order_item_status as enum ('pending', 'served', 'cancelled');
 
 create table users (
   id uuid primary key default gen_random_uuid(),
@@ -132,7 +132,6 @@ select
   o.status as order_status,
   coalesce(sum(oi.unit_price * oi.quantity) filter (where oi.status <> 'cancelled'), 0) as total,
   count(oi.id) filter (where oi.status = 'pending') as pending_count,
-  count(oi.id) filter (where oi.status = 'preparing') as preparing_count,
   max(oi.created_at) as last_item_at
 from orders o
 left join order_items oi on oi.order_id = o.id
@@ -149,7 +148,6 @@ select
   o.opened_by,
   ot.total as running_total,
   ot.pending_count,
-  ot.preparing_count,
   o.persons_count
 from restaurant_tables rt
 left join orders o on o.table_id = rt.id and o.status = 'open'

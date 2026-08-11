@@ -2,7 +2,7 @@ import { formatPrice } from '../lib/pricing.js';
 
 export function TableCard({ table, onSelect, showTotal = true }) {
   const isOpen = Boolean(table.open_order_id);
-  const inProgress = (table.pending_count ?? 0) + (table.preparing_count ?? 0);
+  const inProgress = table.pending_count ?? 0;
 
   return (
     <button

@@ -2,6 +2,10 @@
 // table_overview view, and trims the floor to 15 tables (the bar only has 15).
 // Tables 16-20 are deleted when they were never used, deactivated otherwise.
 // Run with: node scripts/migrate-persons-and-tables.js  (safe to re-run)
+//
+// SUPERSEDED — do not re-run. It rebuilds table_overview with the removed
+// preparing_count column and trims the floor back to 15 tables; both were
+// undone by remove-preparing-status.js and restore-tables-16-20.js.
 require('dotenv/config');
 const { pool, query } = require('../server/db.js');
 

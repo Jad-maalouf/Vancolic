@@ -89,14 +89,6 @@ export function BackIcon(props) {
   );
 }
 
-export function PlayIcon(props) {
-  return (
-    <svg {...base} fill="currentColor" stroke="none" {...props}>
-      <path d="M8 5v14l11-7z" />
-    </svg>
-  );
-}
-
 export function CashIcon(props) {
   return (
     <svg {...base} {...props}>

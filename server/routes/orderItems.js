@@ -6,13 +6,13 @@ const { findOrderById } = require('../db/queries/orders.js');
 
 const router = express.Router();
 
-// Bartender board: every pending/preparing item across all tables.
+// Bartender board: every pending item across all tables.
 router.get('/', authenticate, asyncHandler(async (req, res) => {
   const items = await listActiveOrderItems();
   return res.json({ items });
 }));
 
-const ALLOWED_STATUSES = ['pending', 'preparing', 'served', 'cancelled'];
+const ALLOWED_STATUSES = ['pending', 'served', 'cancelled'];
 
 router.patch('/:id/status', authenticate, requireRole('bartender', 'manager'), asyncHandler(async (req, res) => {
   const { status } = req.body || {};

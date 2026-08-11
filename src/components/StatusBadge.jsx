@@ -1,6 +1,5 @@
 const LABELS = {
   pending: 'Pending',
-  preparing: 'Preparing',
   served: 'Served',
   cancelled: 'Cancelled',
   open: 'Open',

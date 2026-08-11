@@ -89,7 +89,7 @@ export function TablesTab() {
                   <td>{t.client_name || '-'}</td>
                   <td>{t.persons_count || '-'}</td>
                   <td>{formatPrice(t.running_total)}</td>
-                  <td>{(t.pending_count ?? 0) + (t.preparing_count ?? 0)}</td>
+                  <td>{t.pending_count ?? 0}</td>
                   <td onClick={(e) => e.stopPropagation()}>
                     <div className="icon-button-group">
                       <IconButton

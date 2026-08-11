@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { api } from '../api/apiClient.js';
 import { useFetch } from './useFetch.js';
 
-// Bartender board: every pending/preparing item across all tables.
+// Bartender board: every pending item across all tables.
 export function useActiveOrderItems() {
   const { data, loading, error, refetch } = useFetch(api.getActiveOrderItems, []);
   return { items: data?.items ?? [], loading, error, refetch };

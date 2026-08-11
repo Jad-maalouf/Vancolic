@@ -422,9 +422,6 @@ button {
 .status-pending {
   background: #999;
 }
-.status-preparing {
-  background: #00ace5;
-}
 .status-served {
   background: #4caf50;
 }
@@ -457,9 +454,13 @@ button {
   overflow: hidden;
 }
 .table-order-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   font-weight: bold;
   font-size: 0.95rem;
-  padding: 10px 14px;
+  padding: 8px 10px 8px 14px;
   background: #0d5b72;
   color: #fff;
 }
@@ -470,9 +471,6 @@ button {
 .table-order-items tr {
   border-top: 1px solid #eee;
   border-left: 6px solid #999;
-}
-.table-order-items tr.status-preparing {
-  border-left-color: #00ace5;
 }
 .table-order-items tr.status-served {
   border-left-color: #4caf50;
