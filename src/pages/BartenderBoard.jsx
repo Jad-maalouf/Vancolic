@@ -63,6 +63,7 @@ function OrdersTab() {
   const { items, loading, error, refetch } = useActiveOrderItems();
   const [updatingId, setUpdatingId] = useState(null);
   const [servingTableKey, setServingTableKey] = useState(null);
+  const [bulkUpdating, setBulkUpdating] = useState(false);
   const [actionError, setActionError] = useState(null);
 
   // `line` may be several identical rows merged together — serve all of them.
@@ -104,6 +105,25 @@ function OrdersTab() {
     }
   }
 
+  // Serve everything on the board, across every table.
+  async function serveAllTables() {
+    if (items.length === 0) return;
+    if (!window.confirm(`Mark all ${items.length} item(s) below as served?`))
+      return;
+    setBulkUpdating(true);
+    setActionError(null);
+    try {
+      await Promise.all(
+        items.map((item) => api.updateOrderItemStatus(item.id, "served")),
+      );
+      await refetch();
+    } catch (err) {
+      setActionError(err.message);
+    } finally {
+      setBulkUpdating(false);
+    }
+  }
+
   return (
     <div className="bartender-orders">
       <div className="page-header">
@@ -114,6 +134,13 @@ function OrdersTab() {
             label="Refresh"
             className="icon-button-outline"
             onClick={refetch}
+          />
+          <IconButton
+            icon={DoubleCheckIcon}
+            label={bulkUpdating ? "Marking…" : "Serve all tables"}
+            className="icon-button-success"
+            disabled={bulkUpdating || items.length === 0}
+            onClick={serveAllTables}
           />
         </div>
       </div>

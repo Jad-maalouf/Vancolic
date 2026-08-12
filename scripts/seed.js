@@ -49,11 +49,11 @@ const MENU = [
     items: [
       ['Stolichnaya', 45, 5],
       ['Russian Standard', 45, 5],
+      ['Russian Gold', 60, 7],
       ['Smirnoff', 45, 5],
       ['Grey Goose', 80, 9],
       ['Absolut', 50, 6],
       ['Ketel One', 70, null],
-      ['Russian Gold', 60, 7],
       ['White Tea', 15, 2, false],
       ['Belvedere', 110, null, false],
       ['Stolichnaya Gold', 30, 6, false],
@@ -248,7 +248,7 @@ const MENU = [
   },
 ];
 
-const TABLE_COUNT = 20;
+const TABLE_COUNT = 22;
 
 async function seedMenu() {
   const { rows } = await query('select count(*) from menu_items');
